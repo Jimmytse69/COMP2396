@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 /**
  * This is the Shape Class
  * @author Tse Chung Wan, 3035689324
@@ -5,7 +7,6 @@
  * 
  */
 
-import java.awt.Color;
 
 public class Shape {
     public Color color;
@@ -15,8 +16,11 @@ public class Shape {
     public double yc;
     public double[] xLocal;
     public double[] yLocal;
+    
 
-    public void setVertices(double d){}     //dummy to be overridden by its subclasses
+    public void setVertices(double d){  //dummy to be overridden by its subclasses
+        System.out.println("I am the debuggine msg for dummy method");
+    }     
 
     public void translate(double dx, double dy){
         this.xc += dx;  //"this" referring to current object
@@ -42,6 +46,12 @@ public class Shape {
             yr[i] = (int) Math.round(xLocal[i] * sinTheta + yLocal[i] * cosTheta + yc);
         }
         return yr;
+    }
+
+    //for tester and debug only
+    public void setSize(int i){     //i = no. of local vertices
+        this.xLocal = new double[i];
+        this.yLocal = new double[i];
     }
 }
 
