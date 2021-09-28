@@ -1,17 +1,17 @@
 import java.awt.Color;
 
 /**
- * Test Shape.java (access all instance variables and methods) for test and debug
+ * Test Shape.java (access all instance variables and methods) for test and debug.
  * @author Tse Chung Wan, 3035689324
  */
 
 public class ShapeTester {
     public static void main(String[] args){
         System.out.println("Start to testing Shape class");
-        System.out.println("----------------------------");
+        System.out.println("------------------------------------------------------------------------------------");
 
         Shape s = new Shape();
-        System.out.println("a new shape object is created and s is the reference variable");
+        System.out.println("a new shape object is created with reference variable s");
 
         s.color = new Color(0, 0, 0);
         System.out.println("It's color instance variable is refered to Color object with Black parameters");
@@ -40,7 +40,7 @@ public class ShapeTester {
         s.setVertices(3.14d);   //dummy
 
         s.translate(2.7181d, 2.7181d);
-        System.out.println("the new (xc,yc) = (" + s.xc + ',' + s.yc + ')' );
+        System.out.println("the new center: (xc,yc) = (" + s.xc + ',' + s.yc + ')' );
 
         s.rotate(1);
         System.out.println("the new theta = " + s.theta);
@@ -55,7 +55,7 @@ public class ShapeTester {
         }
         
         
-        System.out.println("---------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("The End of testing of Shape class");
 
             
