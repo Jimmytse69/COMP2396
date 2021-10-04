@@ -1,3 +1,5 @@
+import java.rmi.server.ExportException;
+
 public class TestBox {
 	Integer i;
 	int j;
