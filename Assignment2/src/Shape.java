@@ -66,32 +66,28 @@ public class Shape {
         theta += dt;
     }
 
-    /**
-     * a method for retrieving the x-coordinates of the vertices (in counter-clockwise order).
-     * @return screen coordinate of X vertices of the shape rounded to nearest intergers.
-     */
     public int[] getX(){
-        int[] xr = new int[xLocal.length];
-        double cosTheta = Math.cos(theta);
-        double sinTheta = Math.sin(theta);
+        double[] screenXLocal = new double[xLocal.length];
+        int[] roundedScreenXLocal = new int[xLocal.length];
         for (int i = 0; i < xLocal.length; i++){
-            xr[i] = (int) Math.round(xLocal[i] * cosTheta - yLocal[i] * sinTheta + xc);
+            screenXLocal[i] = xLocal[i]*Math.cos(theta) - yLocal[i]*Math.sin(theta) + xc;
+        } 
+        for (int i = 0; i < xLocal.length; i++){
+            roundedScreenXLocal[i] = (int) Math.round(screenXLocal[i]);
         }
-        return xr;
+        return roundedScreenXLocal;
     }
-
-    /**
-     * a method for retrieving the y-coordinates of the vertices (in counter-clockwise order).
-     * @return screen coordinate of Y vertices of the shape rounded to nearest intergers.
-     */
     public int[] getY(){
-        int[] yr = new int[yLocal.length];
-        double cosTheta = Math.cos(theta);
-        double sinTheta = Math.sin(theta);
+        double[] screenYLocal = new double[yLocal.length];
+        int[] roundedScreenYLocal = new int[yLocal.length];
         for (int i = 0; i < yLocal.length; i++){
-            yr[i] = (int) Math.round(xLocal[i] * sinTheta + yLocal[i] * cosTheta + yc);
+            screenYLocal[i] = xLocal[i]*Math.sin(theta) + yLocal[i]*Math.cos(theta) + yc;
+        } 
+        for (int i = 0; i < yLocal.length; i++){
+            roundedScreenYLocal[i] = (int) Math.round(screenYLocal[i]);
         }
-        return yr;
+        return roundedScreenYLocal;
+
     }
 
 }

@@ -32,7 +32,8 @@ public class RegularPolygon extends Shape{
         else{
             this.numOfSides = n;
         }
-        double[] ResetXLocal = new double[this.getXLocal().length];     //Reset Xlocal
+        /**
+         *         double[] ResetXLocal = new double[this.getXLocal().length];     //Reset Xlocal
         for (int i = 0; i < ResetXLocal.length; i++){
             ResetXLocal[i] = 0;
         }
@@ -40,6 +41,8 @@ public class RegularPolygon extends Shape{
         for (int i = 0; i < ResetYLocal.length; i++){
             ResetYLocal[i] = 0;
         }
+         */
+
 
     }
     public void setRadius(double r){
@@ -48,8 +51,9 @@ public class RegularPolygon extends Shape{
         }
         else{
             this.radius = r;
-        }        
-        double[] ResetXLocal = new double[this.getXLocal().length];     //Reset Xlocal
+        }    
+        /**
+         *       double[] ResetXLocal = new double[this.getXLocal().length];     //Reset Xlocal
         for (int i = 0; i < ResetXLocal.length; i++){
             ResetXLocal[i] = 0;
         }
@@ -57,6 +61,8 @@ public class RegularPolygon extends Shape{
         for (int i = 0; i < ResetYLocal.length; i++){
             ResetYLocal[i] = 0;
         }
+         *  */    
+  
     }
     public void setVertices(){
         final double theta = 2*(Math.PI)/numOfSides;
