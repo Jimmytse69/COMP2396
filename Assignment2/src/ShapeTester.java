@@ -44,6 +44,7 @@ public class ShapeTester{
         for(int i = 0; i < s.getX().length; i++)
         System.out.println("vertex" + (i+1) +" : x = " + s.getX()[i] + ", y = " + s.getY()[i]);
 
+        System.out.println('\n' + "Others methods/instances variable etc are private.");
         System.out.println("End of Testing");
 
 
