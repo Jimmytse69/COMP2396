@@ -124,7 +124,7 @@ class RegularPolygon extends Shape{
             }
         }
 
-        for (int i = 1; i < this.getNumOfSides(); ++i){     //i = 1: begin with rotate one time after checking
+        for (int i = 1; i <= this.getNumOfSides(); ++i){     //i = 1: begin with rotate one time after checking
             if (pointXLocal < minX){
                 return false;   //not contain if the point is even lefter than minX
             }
