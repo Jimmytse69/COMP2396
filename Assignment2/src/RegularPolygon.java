@@ -108,30 +108,37 @@ class RegularPolygon extends Shape{
      * @return boolean value, true => (x,y) contains in that Polygon
      */
     //target find min(leftest) x coordinate of vertices, than use the method in appendix
-    public boolean contains(double x, double y){
-        final double theta = 2*(Math.PI)/this.numOfSides;
-        double pointXLocal = (x - this.getXc())*(Math.cos(-this.getTheta())) - (y - this.getYc())*(Math.sin(-this.getTheta()));
-        double pointYLocal = (x - this.getXc())*(Math.sin(-this.getTheta())) + (y - this.getYc())*(Math.cos(-this.getTheta()));
-        double[] XLoc = this.getXLocal();
-        double minX = 0;
-
-        final double fixedPointXLocal = pointXLocal;
-        final double fixedPointYLocal = pointYLocal;
-
-        for (int i = 0; i < this.getNumOfSides(); ++i){ //find minX (lefest point of Xlocal of shape)
-            if (XLoc[i] < minX){
-                minX = XLoc[i];
-            }
-        }
-
-        for (int i = 1; i <= this.getNumOfSides(); ++i){     //i = 1: begin with rotate one time after checking
-            if (pointXLocal < minX){
-                return false;   //not contain if the point is even lefter than minX
-            }
-            //Ref: https://danceswithcode.net/engineeringnotes/rotations_in_2d/rotations_in_2d.html, rotate a point in 2D by theta = 2pi/n
-            pointXLocal = fixedPointXLocal*Math.cos(theta*i) - fixedPointYLocal*Math.sin(theta*i);
-        }
-        return true;    //if both n-1 rotate didn't make it lie outside, it's inside
-    }
+	public boolean contains(double x, double y) {
+		
+		int n = getNumOfSides();
+		double theta = 2 * Math.PI / n;
+		double[] xLocal = getXLocal();
+		double leftmostX = xLocal[0];
+		
+		for (int i = 1; i < n; i++) {
+			if (xLocal[i]<leftmostX) {
+				leftmostX = xLocal[i];
+			}
+				
+		}
+		double xc = getXc();
+		double yc = getYc();
+		double xNew = (x - xc) * Math.cos(-this.getTheta()) - (y - yc) * Math.sin(-this.getTheta());
+		double yNew = (x - xc) * Math.sin(-this.getTheta()) + (y - yc) * Math.cos(-this.getTheta());
+		double temp;
+		
+		for (int j = 0; j < n; j++) {
+			temp = xNew * Math.cos(theta) - yNew * Math.sin(theta);
+			yNew = xNew * Math.sin(theta) + yNew * Math.cos(theta);
+			xNew= temp;
+			
+			if (xNew < leftmostX){
+				return false;
+			}
+		}
+		return true;
+	}
 
 }
+
+
