@@ -74,7 +74,8 @@ public class Card implements Comparable<Card>, Serializable {
 	 *         than, equal to, or greater than the specified card
 	 */
 	public int compareTo(Card card) {
-		if (this.rank > card.rank) {
+		if (this.rank > 
+		card.rank) {
 			return 1;
 		} else if (this.rank < card.rank) {
 			return -1;
