@@ -18,12 +18,17 @@ public class Single extends Hand{
     /**if Single card presented, it is valid.
      * @return boolean true = valid
     */
-    public boolean isValid(){
+    public boolean isValid(){   //not sure how to implement in detail in Ver1.0 now
+        if (this.size() == 1){
+            return true;
+        }
+        return false;
     }
         
     /**Type of this name 
      * @return string of hand type name
     */
     public String getType(){
+        return "Single";
     }
 }
