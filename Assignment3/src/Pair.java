@@ -19,11 +19,18 @@ public class Pair extends Hand{
      * @return boolean true = valid
     */
     public boolean isValid(){
+        if (this.size() == 2){
+            if (this.getCard(0).getRank() == this.getCard(1).getRank()){    //2 same Rank to be pair
+                return true;
+            }
+        }
+        return false;
     }
         
     /**Type of this name 
      * @return string of hand type name
     */
     public String getType(){
+        return "Pair";
     }
 }
