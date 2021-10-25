@@ -19,11 +19,22 @@ public class Flush extends Hand{
      * @return boolean true = valid
     */
     public boolean isValid(){
+        if (this.size() == 5){
+            // if suit of (4)=(3)=(2)=(1)=(0), 5 card have same suit
+            for (int i = 1; i < this.size(); ++i){
+                if (this.getCard(i).getSuit() != this.getCard(i-1).getSuit()){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
         
     /**Type of this name 
      * @return string of hand type name
     */
     public String getType(){
+        return "Flush";
     }
 }
