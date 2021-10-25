@@ -12,7 +12,10 @@ public abstract class Hand extends CardList{
      * @param cards, type CardList
      */
     public Hand(CardGamePlayer player, CardList cards){
-
+        this.player = player;
+        for (int i = 0; i < cards.size(); ++i){
+            this.addCard(cards.getCard(i));     //copy the cards list in param to Hand.cards with addCard and getCard method
+        }
     }
 
     /**private instance variable to state the player who plays this hand */
@@ -27,14 +30,16 @@ public abstract class Hand extends CardList{
     /**public getter for top card of this hand
      * @return topCard, type Card
      */
-    public Card getTopCard(){}
+    public Card getTopCard(){return this.getCard(this.size() - 1);} //top card is the "lastest" card if sorted
 
     /**public method for checking if this hand beats a specified hand
      * @param hand, type Hand
      * @return true = beaten
      */
     public boolean beats(Hand hand){
-
+        if (this.getType() == "StraightFlush"){
+            
+        }
     }
 
     /**abstract methods for checking if this is valid hand, supposed to be overwritten by "leaf node" 
