@@ -37,8 +37,35 @@ public abstract class Hand extends CardList{
      * @return true = beaten
      */
     public boolean beats(Hand hand){
-        if (this.getType() == "StraightFlush"){
-            
+        if (this.getType() == "StraightFlush"){ //case of this.hand = StraightFlush
+            if (hand.getType() != "StraightFlush"){
+                return true; //beaten if this hand is StraightFlush but param's is not (StraightFlush is highest hand)
+            }
+            else{            
+                if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                    return true;
+                }
+                else if (this.getTopCard().getRank() == hand.getTopCard().getRank()){
+                    if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
+                        return true;
+                    }
+                    return false;   //same type same rank, but this hand have lower/equal suit so it is not beaten param's hand
+                }
+                else{
+                    return false;   //same type lower rank always lose
+                }
+            }
+        }
+        else if (this.getType() == "Quad"){
+            if (hand.getType() == "StraightFlush"){
+                return false;   //always lose to StraightFlush
+            }
+            else if (hand.getType() == "Quad"){
+                if ()
+            }
+            else{
+                return true;    //type is lower, so we win
+            }
         }
     }
 
