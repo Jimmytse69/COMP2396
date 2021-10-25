@@ -19,12 +19,16 @@ public class Straight extends Hand{
      * @return boolean true = valid
     */
     public boolean isValid(){
+        if (this.size() == 5){
+            
+        }
     }
         
     /**Type of this name 
      * @return string of hand type name
     */
     public String getType(){
+        return "Straight";
     }
 }
 

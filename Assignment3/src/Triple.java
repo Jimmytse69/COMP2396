@@ -1,5 +1,3 @@
-import java.util.*;
-
 /**
  * This Triple is subclass of Hand class
  * @author Tse Chung Wan, 3035689324
