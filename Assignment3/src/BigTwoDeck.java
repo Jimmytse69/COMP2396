@@ -29,7 +29,7 @@ public class BigTwoDeck extends Deck{
         removeAllCards();
         for (int i = 0; i < 4; ++i){    //i = suit number
             for (int j = 0; j < 13; j++){   //j = rank number
-                addCard(new BigTwoCard(i, bigTwoRank[j]));  //convert to bigTwoRank system, BigTwoDeck is sort from smallest to biggest in terms of big2
+                bigTwoDeck.add(new BigTwoCard(i, bigTwoRank[j]));  //convert to bigTwoRank system, BigTwoDeck is sort from smallest to biggest in terms of big2
             }    
         }
 
