@@ -21,8 +21,6 @@ public class Quad extends Hand{
      * @return boolean true = valid
     */
     public boolean isValid(){
-        boolean first4 = false;
-        boolean last4 = false;
         int first4Count = 0;
         int last4Count = 0;
         ArrayList<Integer> freqOfRank = new ArrayList<Integer>(); 
