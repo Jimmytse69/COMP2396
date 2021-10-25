@@ -9,6 +9,15 @@
 public class BigTwoCard extends Card{
 
     /**
+     * private static variable to indicate the rank difference from normal poker game.
+     * this is a look up table (where index indicate) from rank lower to high.
+     * RANK[2] = rank 3 which is smallest.
+     * RANK[1] = rank 2 which is biggest (Big2)
+     * RANK[0] = rank ACE which is only smaller than Big 2 in this game
+     */
+    private static int[] bigTwoRank = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 0, 1};
+
+    /**
      * Constructor for building a card with specified suit and rank, suit is int (0-3) and rank is int (0-12)
      * @param suit, int type
      * @param rank, int type
@@ -24,6 +33,25 @@ public class BigTwoCard extends Card{
      * @param card, Card type
      * @return int, indicate less,equal or greater
      */
+    //need to translate to back to accending order first by look up table (static array)
     public int compareTo(Card card){
+        if (bigTwoRank[this.rank] > bigTwoRank[card.rank]){
+            return 1;       //this card in BigTwo rank system is greater
+        }
+        else if (bigTwoRank[this.rank] < bigTwoRank[card.rank]){
+            return -1;
+        }
+        else{   //when 2 card's big2Rank is equal, compare suit
+            if (this.suit > card.suit){
+                return 1;
+            }
+            else if (this.suit < card.suit){
+                return -1;
+            }
+            else{   //both rank and suit are equal
+                return 0;
+            }
+        }
+
     }
 }
