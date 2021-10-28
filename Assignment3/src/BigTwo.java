@@ -17,14 +17,11 @@ public class BigTwo {
         CardGamePlayer p2 = new CardGamePlayer("Player2");
         CardGamePlayer p3 = new CardGamePlayer("Player3");
         CardGamePlayer p4 = new CardGamePlayer("Player4");
-        playerList.add(p1);
-        playerList.add(p2);
-        playerList.add(p3);
-        playerList.add(p4);
+        this.playerList = new ArrayList<CardGamePlayer>(List.of(p1, p2, p3, p4));
         //end of (i)
 
-        BigTwoUI ui;        //idk what i am doing, is UI obj in BigTwoUI to construct need BigTwo type object named game?
-
+        BigTwoUI Big2UI = new BigTwoUI(this);        //idk what i am doing, is UI obj in BigTwoUI to construct need BigTwo type object named game? (update): resolved by forum
+        this.ui = Big2UI;
     }
 
 
@@ -86,8 +83,8 @@ public class BigTwo {
         for (int i = 0; i < this.getNumOfPlayers(); ++i){
             this.getPlayerList().get(i).removeAllCards();   //remove all cards from players
         }
-        //Ref: https://www.geeksforgeeks.org/arraylist-removeall-method-in-java-with-examples/ 
-        this.getHandsOnTable().removeAll(this.getHandsOnTable());   //remove all hands from table
+        ArrayList<Hand> toReset = new ArrayList<Hand>();
+        this.handsOnTable = toReset;    //remove all cards from table by create a new empty ArrayList of Hand and overwrite it
 
         //step (ii)
         deck.shuffle(); //shuffle the ordered deck

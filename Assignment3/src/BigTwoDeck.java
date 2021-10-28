@@ -4,14 +4,13 @@ import java.util.*;
  * This BigTwoDeck class is a subclass of the Deck class to model a deck of cards used in a Big Two game.
  * The overwritten methods as detailed as below
  * @author Tse Chung Wan, 3035689324
- * @version 1.0
- * @date 19/10/2021 (start ver1.0)
+ * @version 1.1: 
+ * v1.0: BigTwo.java have NullPointerException when complie, it point to initialize() method in this class; redo it
+ * (update): after redo, realize why i am creating new bigTwoDeck instance var. to store but not use .addCard inherit method
+ * @date 19/10/2021 (start ver1.0); 28/10/2021 (start ver1.1)
  */
 
 public class BigTwoDeck extends Deck{
-    /**create a new private ArrayList<BigTwoCard> to represent a BigTwoDeck in terms of BigTwoCard*/
-    private ArrayList<BigTwoCard> bigTwoDeck = new ArrayList<BigTwoCard>();
-
     /**
      * private static variable to indicate the rank difference from normal poker game.
      * this is a look up table (where index indicate) from rank lower to high.
@@ -26,12 +25,11 @@ public class BigTwoDeck extends Deck{
      * it will remove all cards from the deck, create 52 Big Two cards and add them to the deck.
      */
     public void initialize(){
-        removeAllCards();
-        for (int i = 0; i < 4; ++i){    //i = suit number
-            for (int j = 0; j < 13; j++){   //j = rank number
-                bigTwoDeck.add(new BigTwoCard(i, bigTwoRank[j]));  //convert to bigTwoRank system, BigTwoDeck is sort from smallest to biggest in terms of big2
-            }    
+        this.removeAllCards();
+        for (int i = 0; i < 4; ++i){
+            for (int j = 0; j < 13; ++j){
+                this.addCard(new Card(i, bigTwoRank[j]));
+            }
         }
-
     }
 }

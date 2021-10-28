@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="Assignment1/src"/>
+	<classpathentry kind="src" path="Assignment2/src"/>
+	<classpathentry kind="src" path="Assignment3/src"/>
+	<classpathentry kind="src" path="LectureExample/Example1/src"/>
+	<classpathentry kind="src" path="LectureExample/Example2/src"/>
+	<classpathentry kind="src" path="LectureExample/Example3/src"/>
+	<classpathentry kind="src" path="LectureExample/Example4/src"/>
+	<classpathentry kind="src" path="LectureExample/Example5/src"/>
+	<classpathentry kind="src" path="LectureExample/Example6/src"/>
+	<classpathentry kind="src" path="LectureExample/Example7/src"/>
+	<classpathentry kind="src" path="Testing/Testing/src"/>
+	<classpathentry kind="src" path="Tutorial/COMP2396A-Tutorial2/src"/>
+	<classpathentry kind="src" path="Tutorial/COMP2396A-Tutorial3/src"/>
+	<classpathentry kind="src" path="Tutorial/COMP2396A-Tutorial4/src"/>
+	<classpathentry kind="src" path="Tutorial/COMP2396A-Tutorial5/src"/>
+	<classpathentry kind="output" path="Assignment1/bin"/>
+</classpath>
