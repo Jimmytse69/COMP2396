@@ -1,7 +1,12 @@
 {
     "configurations": [
-        
-
+        {
+            "type": "java",
+            "name": "Launch BigTwoDeckTester",
+            "request": "launch",
+            "mainClass": "BigTwoDeckTester",
+            "projectName": "Assignment3_6971c5b3"
+        },
         {
             "type": "java",
             "name": "Spring-Boot-App",
@@ -10,7 +15,7 @@
             "console": "internalConsole",
             "mainClass": "com.blr.appName.ApplicationName",
             "projectName": "projectName",
-            "args": "",
+            "args": ""
         }
     ]
 }
