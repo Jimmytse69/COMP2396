@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        
+
+        {
+            "type": "java",
+            "name": "Spring-Boot-App",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.blr.appName.ApplicationName",
+            "projectName": "projectName",
+            "args": "",
+        }
+    ]
+}

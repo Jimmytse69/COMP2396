@@ -15,7 +15,10 @@
 /Bar.class
 /BigTwo.class
 /BigTwoCard.class
+/BigTwoCardTester.class
 /BigTwoDeck.class
+/BigTwoDeckTester.class
+/BigTwoHandTester.class
 /BigTwoUI.class
 /Bottle.class
 /Bottle2.class
@@ -94,5 +97,3 @@
 /WithoutAutoBoxing.class
 /Wolf.class
 /WrapperClassesExample.class
-/BigTwoCardTester.class
-/BigTwoDeckTester.class
