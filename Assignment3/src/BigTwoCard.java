@@ -2,8 +2,9 @@
  * This BigTwoCard class is a subclass of the Card class and is used to model a card used in a Big Two card game.
  * The contructor and overwritten methods are showed below
  * @author Tse Chung Wan, 3035689324
- * @version 1.0
- * @date 19/10/2021 (v1.0 start)
+ * @version 1.1
+ * v1.0 CompareTo method not working (not sorted in big2 order), try to rewrite
+ * @date 19/10/2021 (v1.0 start); 29/10/2021 (v1.1 start)
  */
 
 public class BigTwoCard extends Card{
@@ -35,23 +36,18 @@ public class BigTwoCard extends Card{
      */
     //need to translate to back to accending order first by look up table (static array)
     public int compareTo(Card card){
-        if (bigTwoRank[this.rank] > bigTwoRank[card.rank]){
-            return 1;       //this card in BigTwo rank system is greater
-        }
-        else if (bigTwoRank[this.rank] < bigTwoRank[card.rank]){
-            return -1;
-        }
-        else{   //when 2 card's big2Rank is equal, compare suit
-            if (this.suit > card.suit){
-                return 1;
-            }
-            else if (this.suit < card.suit){
-                return -1;
-            }
-            else{   //both rank and suit are equal
-                return 0;
-            }
-        }
-
-    }
+        if (this.rank > 
+		card.rank) {
+			return 1;
+		} else if (this.rank < card.rank) {
+			return -1;
+		} else if (this.suit > card.suit) {
+			return 1;
+		} else if (this.suit < card.suit) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
 }
+
