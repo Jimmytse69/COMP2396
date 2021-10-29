@@ -1,8 +1,10 @@
 /**
  * This Hand class is a subclass of the CardList class used to model a hand of cards. detail shown below
  * @author Tse Chung Wan, 3035689324
- * @version 1.0
- * @date 19/10/2021 (start ver1.0)
+ * @version 1.1
+ * v1.0: Tester wrong, caused by the beat method is directly compare card rank not in terms of rule of Big2Rank.
+ * Should use .compareTo method to compare instead
+ * @date 19/10/2021 (start ver1.0); 29/10/2021 (start ver1.1)
  */
 
 public abstract class Hand extends CardList{
@@ -37,6 +39,16 @@ public abstract class Hand extends CardList{
      * @return true = beaten
      */
     public boolean beats(Hand hand){
+        int bigger = this.getTopCard().compareTo(hand.getTopCard());    //if same hand type, it is used to convert bool\
+        boolean big = false;
+        boolean equal = false;
+        if (bigger > 0){
+            big = true;
+        }
+        else if (bigger == 0){
+            equal = true;
+        }
+
         if (this.getType() == "StraightFlush"){ //case of this.hand = StraightFlush
             if (hand.getType() != "StraightFlush"){
                 return true; //beaten if this hand is StraightFlush but param's is not (StraightFlush is highest hand)
@@ -159,10 +171,10 @@ public abstract class Hand extends CardList{
                 return false;
             }
             else if (hand.getType() == "Pair"){
-                if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                if (big){
                     return true;
                 }
-                else if (this.getTopCard().getRank() == hand.getTopCard().getRank()){
+                else if (equal){
                     if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
                         return true;
                     }
