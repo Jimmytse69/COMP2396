@@ -42,30 +42,18 @@ public class BigTwoHandTester {
     public static void main(String[] args){
         CardList cards1, cards2;
 
-        /**
-         * Attempt to campare two legit hands
-         */
-        // Player 1: a pair of 3s
         cards1 = new CardList();
-        cards1.addCard(new BigTwoCard(0,2));    //3d
-        cards1.addCard(new BigTwoCard(1,2));    //3c
-        Hand h1 = new Pair(p1, cards1);
-        System.out.println("1P players" + h1.getType() + " :");
-        cards1.print();
+        cards1.addCard(new BigTwoCard(0, 0));
+        cards1.addCard(new BigTwoCard(0, 1));
+        cards1.addCard(new BigTwoCard(0, 2));
+        cards1.addCard(new BigTwoCard(0, 3));
+        cards1.addCard(new BigTwoCard(0, 4));
 
-        //Player 2: a paire of 2s
         cards2 = new CardList();
-        cards2.addCard(new BigTwoCard(3,1));    //2s
-        cards2.addCard(new BigTwoCard(2,1));    //2h
-        Hand h2 = new Pair(p2, cards2);
-        System.out.println("2P players " + h2.getType() + " :");
-        cards2.print();
-        //Compare the two hands
-        if (h1.beats(h2)){
-            System.out.println("1P wins!");
-        }   else{
-            System.out.println("1P does not beat 2P.");
-        }
+        cards2.addCard(new BigTwoCard(2, 1));
+        cards2.addCard(new BigTwoCard(3, 1));
+
+        composeAndCompare(cards1, cards2);
 
         System.out.println("========");
     }

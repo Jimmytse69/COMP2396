@@ -4,6 +4,7 @@
  * @version 1.1
  * v1.0: Tester wrong, caused by the beat method is directly compare card rank not in terms of rule of Big2Rank.
  * Should use .compareTo method to compare instead
+ * (updated): not sure getTop is really the top, add .sort method to sort and get Top
  * @date 19/10/2021 (start ver1.0); 29/10/2021 (start ver1.1)
  */
 
@@ -32,7 +33,10 @@ public abstract class Hand extends CardList{
     /**public getter for top card of this hand
      * @return topCard, type Card
      */
-    public Card getTopCard(){return this.getCard(this.size() - 1);} //top card is the "lastest" card if sorted
+    public Card getTopCard(){
+        this.sort();
+        return this.getCard(this.size() - 1);   //top card is the "lastest" card if sorted
+    }
 
     /**public method for checking if this hand beats a specified hand
      * @param hand, type Hand
@@ -54,10 +58,10 @@ public abstract class Hand extends CardList{
                 return true; //beaten if this hand is StraightFlush but param's is not (StraightFlush is highest hand)
             }
             else{            
-                if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                if (big){
                     return true;
                 }
-                else if (this.getTopCard().getRank() == hand.getTopCard().getRank()){
+                else if (equal){
                     if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
                         return true;
                     }
@@ -73,7 +77,7 @@ public abstract class Hand extends CardList{
                 return false;   //always lose to StraightFlush
             }
             else if (hand.getType() == "Quad"){
-                if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                if (big){
                     return true;
                 }
                 else{
@@ -89,7 +93,7 @@ public abstract class Hand extends CardList{
                 return false;
             }
             else if (hand.getType() == "FullHouse"){
-                if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                if (big){
                     return true;
                 }
                 else{
@@ -109,7 +113,7 @@ public abstract class Hand extends CardList{
                     return true;
                 }
                 else if (this.getTopCard().getSuit() == hand.getTopCard().getSuit()){
-                    if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                    if (big){
                         return true;
                     }
                     else{
@@ -129,10 +133,10 @@ public abstract class Hand extends CardList{
                 return false;
             }
             else if (hand.getType() == "Straight"){
-                if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                if (big){
                     return true;
                 }
-                else if (this.getTopCard().getRank() == hand.getTopCard().getRank()){
+                else if (equal){
                     if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
                         return true;
                     }
@@ -154,7 +158,7 @@ public abstract class Hand extends CardList{
                 return false;
             }
             else if (hand.getType() == "Triple"){
-                if (this.getTopCard().getRank() > this.getTopCard().getRank()){
+                if (big){
                     return true;
                 }
                 else{
@@ -192,10 +196,10 @@ public abstract class Hand extends CardList{
         }
         else{   //only left Single class
             if (hand.getType() == "Single"){
-                if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                if (big){
                     return true;
                 }
-                else if (this.getTopCard().getRank() == hand.getTopCard().getRank()){
+                else if (equal){
                     if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
                         return true;
                     }
