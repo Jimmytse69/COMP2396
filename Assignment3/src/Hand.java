@@ -21,7 +21,6 @@ public abstract class Hand extends CardList{
         }
     }
 
-    /**private instance variable to state the player who plays this hand */
     private CardGamePlayer player;
 
 

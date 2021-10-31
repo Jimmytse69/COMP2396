@@ -24,23 +24,16 @@ public class BigTwo {
         this.ui = Big2UI;
     }
 
-
-    /**private attributes to specifying the number of players, should be 4 in a normal game */
     private int numOfPlayers;
 
-    /**private attributes to store the deck of cards of the game */
     private Deck deck;
 
-    /**private attributes to record the list of players */
     private ArrayList<CardGamePlayer> playerList;
 
-    /**private attributes to record the list of hands played on Table */
     private ArrayList<Hand> handsOnTable;
 
-    /**private attributes to specifying the index of current player */
     private int currentPlayerIdx;
 
-    /**private UI object for providing User Interface in a normal Big Two game */
     private BigTwoUI ui;
 
 

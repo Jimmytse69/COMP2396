@@ -8,13 +8,9 @@ import java.util.*;
  */
 
 public class Straight extends Hand{
-    /**
-     * private static variable to indicate the rank difference from normal poker game.
-     * this is a look up table (where index indicate) from rank lower to high.
-     * RANK[2] = rank 3 which is smallest.
-     * RANK[1] = rank 2 which is biggest (Big2)
-     * RANK[0] = rank ACE which is only smaller than Big 2 in this game
-     */
+
+    //private static variable to indicate the rank difference from normal poker game. This is a look up table (where index indicate) from rank lower to high.
+    //RANK[2] = rank 3 which is smallest, RANK[1] = rank 2 which is biggest (Big2)
     private static ArrayList<Integer> bigTwoRank = new ArrayList<>(List.of(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 0, 1));
 
     /**
