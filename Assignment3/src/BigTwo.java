@@ -3,8 +3,10 @@ import java.util.*;
 /**
  * This BigTwo class is used to model a Big Two card game, the instance variables and methods detail are shown below.
  * @author Tse Chung Wan, 3035689324
- * @version 1.0
- * @date 19/10/2021 (starting v1.0)
+ * @version 1.1
+ * @date 19/10/2021 (starting v1.0); 5/11/2021 (starting v1.1)
+ * v1.0: NullPointerException, instance var didn't initialize coursing it.
+ * v1.1: fixing by redo checkmove(), but seems there are minor bug still.
  */
 
 public class BigTwo implements CardGame{
@@ -13,10 +15,10 @@ public class BigTwo implements CardGame{
      * (ii): create a BigTwoUI object for user interface.
      */
     BigTwo(){
-        CardGamePlayer p1 = new CardGamePlayer("Player1");
-        CardGamePlayer p2 = new CardGamePlayer("Player2");
-        CardGamePlayer p3 = new CardGamePlayer("Player3");
-        CardGamePlayer p4 = new CardGamePlayer("Player4");
+        CardGamePlayer p1 = new CardGamePlayer("Player 0");
+        CardGamePlayer p2 = new CardGamePlayer("Player 1");
+        CardGamePlayer p3 = new CardGamePlayer("Player 2");
+        CardGamePlayer p4 = new CardGamePlayer("Player 3");
         this.playerList = new ArrayList<CardGamePlayer>(List.of(p1, p2, p3, p4));
         //end of (i)
 
@@ -24,17 +26,17 @@ public class BigTwo implements CardGame{
         this.ui = Big2UI;
     }
 
-    private int numOfPlayers;
+    private int numOfPlayers = 4;
 
-    private Deck deck;
+    private Deck deck = new Deck();
 
-    private ArrayList<CardGamePlayer> playerList;
+    private ArrayList<CardGamePlayer> playerList = new ArrayList<CardGamePlayer>();
 
-    private ArrayList<Hand> handsOnTable;
+    private ArrayList<Hand> handsOnTable = new ArrayList<Hand>();
 
-    private int currentPlayerIdx;
+    private int currentPlayerIdx = 0;
 
-    private BigTwoUI ui;
+    private BigTwoUI ui = new BigTwoUI(this);
 
 
     /**public getter of number of player (private attributes) 
@@ -76,8 +78,7 @@ public class BigTwo implements CardGame{
         for (int i = 0; i < this.getNumOfPlayers(); ++i){
             this.getPlayerList().get(i).removeAllCards();   //remove all cards from players
         }
-        ArrayList<Hand> toReset = new ArrayList<Hand>();
-        this.handsOnTable = toReset;    //remove all cards from table by create a new empty ArrayList of Hand and overwrite it
+        this.handsOnTable.clear();    //remove all cards from table by create a new empty ArrayList of Hand and overwrite it
 
         //step (ii)
         deck.shuffle(); //shuffle the ordered deck
@@ -105,8 +106,8 @@ public class BigTwo implements CardGame{
         //step (iii)&(iv)
         for (int i = 0; i < this.numOfPlayers; ++i){
             for (int j = 0; j < deck.size()/4; ++j){
-                if (this.getPlayerList().get(i).getCardsInHand().getCard(j).getRank() == 0  &&
-                    this.getPlayerList().get(i).getCardsInHand().getCard(j).getSuit() == 0){    //this is in BigTwoCard System. Thus, (0,0) = diamond 3
+                if (this.getPlayerList().get(i).getCardsInHand().getCard(j).getRank() == 2  &&
+                    this.getPlayerList().get(i).getCardsInHand().getCard(j).getSuit() == 0){    //(0,2) = diamond 3
                         this.currentPlayerIdx = i;  //current player = who holding diamond 3
                         this.ui.setActivePlayer(i); //ui obj in this class's private attribute ActivePlayer = who holding diamond 3
                 }
@@ -132,15 +133,90 @@ public class BigTwo implements CardGame{
         this.checkMove(playerIdx, cardIdx);
     }
 
+    private int resetCounter = 0;  //reset state if the player plays a hand and passed by others 3 players (need to player abriary valid hand)
     /**public method for checking a move made by player. Supposed to called from makeMove() method. */
     public void checkMove(int playerIdx, int[] cardIdx){
-        //idea is put the cardIdx translate to CardList varible, then composeHand
-        CardList possibleMove = new CardList();
-        for (int i = 0; i < cardIdx.length; ++i){
-            possibleMove.addCard(this.playerList.get(playerIdx).getCardsInHand().getCard(cardIdx[i]));  //add those card 1-by-1
+        boolean validHand = false;
+        
+        String handType = "NULL";
+        int handTypeIdx = -1;
+
+        if (this.endOfGame() == true){      //check end game
+            System.out.println("Game ends");
+            System.out.println("Player 0 has " + playerList.get(0).getNumOfCards() + " cards in hand.");
+            System.out.println("Player 1 has " + playerList.get(1).getNumOfCards() + " cards in hand.");
+            System.out.println("Player 2 has " + playerList.get(2).getNumOfCards() + " cards in hand.");
+            System.out.println("Player 3 has " + playerList.get(3).getNumOfCards() + " cards in hand.");
+            System.exit(0);     //exit the game
         }
-        composeHand(this.getPlayerList().get(playerIdx), possibleMove); //composeHand if it is valid
+        
+        if (cardIdx == null){       //if this is null, implies player passed (space, enter), resetCounter = 3 means it cannot be pass
+            if (resetCounter < 3){
+                System.out.println("{Pass}");
+                currentPlayerIdx = (playerIdx + 1) % 4;
+                resetCounter += 1;
+            }
+        }
+        else{
+            CardList possibleCardList = new CardList();     //all card that player played
+            for (int i = 0; i < cardIdx.length; ++i){
+                possibleCardList.addCard(playerList.get(playerIdx).getCardsInHand().getCard(cardIdx[i]));
+            }
+
+            //i think these code should use ComposeHand instaead in v1.1
+            Single pS = new Single(playerList.get(playerIdx), possibleCardList);
+            Pair pP = new Pair(playerList.get(playerIdx), possibleCardList);
+            Triple pT = new Triple(playerList.get(playerIdx), possibleCardList);
+            Straight pSt = new Straight(playerList.get(playerIdx), possibleCardList);
+            Flush pF = new Flush(playerList.get(playerIdx), possibleCardList);
+            FullHouse pFH = new FullHouse(playerList.get(playerIdx), possibleCardList);
+            Quad pQ = new Quad(playerList.get(playerIdx), possibleCardList);
+            StraightFlush pSF = new StraightFlush(playerList.get(playerIdx), possibleCardList);
+            ArrayList<Hand> hands = new ArrayList<Hand>(List.of(pS, pP, pT, pSt, pF, pFH, pQ, pSF));
+            for (int i = 0; i < hands.size(); ++i){
+                if (hands.get(i).isValid()){
+                    handType = hands.get(i).getType();
+                    handTypeIdx = i;
+                    System.out.println(handType);
+
+                }
+            }
+            
+            if (handType != "NULL"){        //is a Valid hand
+                if (handsOnTable.size() == 0){
+                    if (possibleCardList.contains(new BigTwoCard(0, 2))){     //contain diamond 3
+                        validHand = true;
+                    }
+                }
+                else{   //not fist move
+                    if (hands.get(handTypeIdx).beats(handsOnTable.get(handsOnTable.size() - 1))){       //beats Top hands in handsOnTable
+                        validHand = true;
+                    }   
+                }
+                
+                if (resetCounter == 3){
+                    resetCounter = 0;
+                    validHand = true;       //back to origin player who play a hand makes other 3 passed
+                }
+            }
+
+
+            if (validHand){   
+                currentPlayerIdx = (playerIdx + 1) % 4;
+                handsOnTable.add(hands.get(handTypeIdx));   //add this Valid hand to table
+                playerList.get(playerIdx).removeCards(possibleCardList);
+                
+            }
+            else{
+                System.out.println("Not a legal move!!!");
+                currentPlayerIdx = playerIdx;   //prompt this user again until valid move
+            }
+        }
+        ui.setActivePlayer(currentPlayerIdx);
+        ui.repaint();
+        ui.promptActivePlayer();
     }
+
     /**public method for checking if the game ends. */  
     public boolean endOfGame(){
         for (int i = 0; i < 4; ++i){
