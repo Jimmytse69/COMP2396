@@ -7,7 +7,7 @@ import java.util.*;
  * @date 19/10/2021 (starting v1.0)
  */
 
-public class BigTwo {
+public class BigTwo implements CardGame{
     /**Construstor for creating a Big Two card game. There are 2 procedures:
      * (i) : create 4 players and add them to player list
      * (ii): create a BigTwoUI object for user interface.
@@ -140,6 +140,15 @@ public class BigTwo {
             possibleMove.addCard(this.playerList.get(playerIdx).getCardsInHand().getCard(cardIdx[i]));  //add those card 1-by-1
         }
         composeHand(this.getPlayerList().get(playerIdx), possibleMove); //composeHand if it is valid
+    }
+    /**public method for checking if the game ends. */  
+    public boolean endOfGame(){
+        for (int i = 0; i < 4; ++i){
+            if (playerList.get(i).getNumOfCards() == 0){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**public static Main method to start a Big Two card game. It should
