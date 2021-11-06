@@ -3,8 +3,11 @@ import java.util.*;
 /**
  * This Quad is subclass of Hand class
  * @author Tse Chung Wan, 3035689324
- * @version 1.0
- * @date 19/10/2021 (start v1.0)
+ * @version 1.1
+ * @date 19/10/2021 (start v1.0); 6/11/2021 (start v1.1)
+ * v1.0 redo the isValid(), may have bug
+ * (update) bug casued by i!=j logic when i=4, it is not possible to be j=4 (max = 3)
+ * (update2) the getTopCard method need to overwirte
  */
 
 public class Quad extends Hand{
@@ -21,33 +24,30 @@ public class Quad extends Hand{
      * @return boolean true = valid
     */
     public boolean isValid(){
-        int first4Count = 0;
+        this.sort();
+        int first4Count = 0;    //sort will make it only left this 2 cases
         int last4Count = 0;
-        ArrayList<Integer> freqOfRank = new ArrayList<Integer>(); 
         if (this.size() == 5){
-            for (int i = 0; i < this.size(); ++i){
-                freqOfRank.add(this.getCard(i).getRank());
-            }
-            //sorted order of freqOfRank. the (first4 should have same rank) or (last 4 should have same rank)
-            Collections.sort(freqOfRank);
-            for (int j = 0; j < this.size() - 2; ++j){
-                if (freqOfRank.get(j) == freqOfRank.get(j+1)){
-                    first4Count++;  //0-1, 1-2, 2-3
+            for (int i = 0; i < 3; ++i){
+                if (this.getCard(i).getRank() == this.getCard(i+1).getRank()){
+                    first4Count += 1;
                 }
             }
-            for (int k = 1; k < this.size() - 1; ++k){
-                if (freqOfRank.get(k) == freqOfRank.get(k+1)){
-                    last4Count++;   //1-2, 2-3, 3-4
+            for (int j = 1; j < 4; ++j){
+                if (this.getCard(j).getRank() == this.getCard(j+1).getRank()){
+                    last4Count += 1;
                 }
-            }
-            if (first4Count != 3 && last4Count != 3){
-                return false;
-            }
-            else{
-                return true;    //at least 1 == 3
             }
         }
-        return false;
+        else{
+            return false;
+        }
+        if (first4Count == 3 || last4Count == 3){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
         
     /**Type of this name 
@@ -55,5 +55,19 @@ public class Quad extends Hand{
     */
     public String getType(){
         return "Quad";
+    }
+
+    /**public getter for top card of this hand
+     * Overwrite it for Quad
+     * @return topCard, type Card
+     */
+    public Card getTopCard(){
+        this.sort();
+        if (this.getCard(0).getRank() == this.getCard(1).getRank()){    //it means it is in the pattern x,x,x,x,odd when sorted
+            return this.getCard(3);
+        }
+        else{
+            return this.getCard(4);
+        }
     }
 }

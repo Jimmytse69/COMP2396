@@ -3,10 +3,11 @@ import java.util.*;
 /**
  * This BigTwo class is used to model a Big Two card game, the instance variables and methods detail are shown below.
  * @author Tse Chung Wan, 3035689324
- * @version 1.1
- * @date 19/10/2021 (starting v1.0); 5/11/2021 (starting v1.1)
+ * @version 1.2
+ * @date 19/10/2021 (starting v1.0); 5/11/2021 (starting v1.1); 6/11/2021 (starting v1.2)
  * v1.0: NullPointerException, instance var didn't initialize coursing it.
  * v1.1: fixing by redo checkmove(), resetCounter(pass) minor bug fix
+ * (minor bug unfix: player with diamond 3 cannot pass in first turn)
  */
 
 public class BigTwo implements CardGame{
@@ -144,7 +145,7 @@ public class BigTwo implements CardGame{
         if (this.endOfGame() == true){      //check end game
             System.out.println("Game ends");
             for (int i = 0; i < numOfPlayers; ++i){
-                if (i == (currentPlayerIdx - 1) % 4){   //[Empty] then next player will end the game, so it is previous player
+                if (i == (currentPlayerIdx + 3) % 4){   //[Empty] then next player will end the game, so it is previous player mod(+3) to avoid neg value
                     System.out.println("Player " + i + " wins the game.");
                 }
                 else{
@@ -166,8 +167,9 @@ public class BigTwo implements CardGame{
             for (int i = 0; i < cardIdx.length; ++i){
                 possibleCardList.addCard(playerList.get(playerIdx).getCardsInHand().getCard(cardIdx[i]));
             }
+            possibleCardList.sort();
 
-            //i think these code should use ComposeHand instaead in v1.1
+            //i think these code should use ComposeHand() instaead
             Single pS = new Single(playerList.get(playerIdx), possibleCardList);
             Pair pP = new Pair(playerList.get(playerIdx), possibleCardList);
             Triple pT = new Triple(playerList.get(playerIdx), possibleCardList);
@@ -191,9 +193,11 @@ public class BigTwo implements CardGame{
                     }
                 }
                 else{   //not fist move
-                    if (hands.get(handTypeIdx).beats(handsOnTable.get(handsOnTable.size() - 1))){       //beats Top hands in handsOnTable
-                        validHand = true;
-                    }   
+                    if (cardIdx.length == handsOnTable.get(handsOnTable.size() - 1).size()){    //only same number of cards maybe ok
+                        if (hands.get(handTypeIdx).beats(handsOnTable.get(handsOnTable.size() - 1))){       //beats Top hands in handsOnTable
+                            validHand = true;
+                        }  
+                    }
                 }
                 
                 if (resetCounter == 3){
@@ -240,7 +244,7 @@ public class BigTwo implements CardGame{
 
         BigTwoDeck deck = new BigTwoDeck();
         deck.initialize();
-        deck.shuffle();
+        //deck.shuffle();
         
         game.start(deck);
     }

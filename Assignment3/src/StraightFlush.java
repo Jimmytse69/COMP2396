@@ -26,22 +26,26 @@ public class StraightFlush extends Hand{
      * @return boolean true = valid
     */
     public boolean isValid(){
+        this.sort();    //ensure it is in order
+        int counter = 0;
         if (this.size() == 5){
-            for (int i = 1; i < this.size(); ++i){
-                if (this.getCard(i).getSuit() != this.getCard(i-1).getSuit()){
-                    return false;   //if "one pair" out of 4 between 5 are not same suit, it is not striaghtflush
+            for (int i = 0; i < 4; ++i){
+                if (this.getCard(i).getRank() + 1 == this.getCard(i+1).getRank()){      //it is at least Striagth
+                    if (this.getCard(i).getSuit() == this.getCard(i+1).getSuit()){
+                        counter += 1;
+                    }
                 }
             }
-            //reference: https://stackoverflow.com/questions/6171663/how-to-find-the-index-of-an-element-in-an-int-array
-            for (int i = 1; i < this.size(); ++i){
-                //if the top card (i) in terms of big2rank is 1 more then (i-1). it should be consecutive for 5 times (Assume sorted form small to big)
-                if (bigTwoRank.indexOf(this.getCard(i).getRank()) - bigTwoRank.indexOf(this.getCard(i-1).getRank()) != 1){
-                    return false;
-                }
-            }
+        }
+        else{
+            return false;
+        }
+        if (counter == 4){
             return true;
         }
-        return false;   //it is not even 5 cards.
+        else{
+            return false;
+        }
     }
         
     /**Type of this name 

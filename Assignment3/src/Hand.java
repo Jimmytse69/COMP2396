@@ -5,6 +5,7 @@
  * v1.0: Tester wrong, caused by the beat method is directly compare card rank not in terms of rule of Big2Rank.
  * Should use .compareTo method to compare instead
  * (updated): not sure getTop is really the top, add .sort method to sort and get Top
+ * (updated2): Only Quad need extra "top" treatment
  * @date 19/10/2021 (start ver1.0); 29/10/2021 (start ver1.1)
  */
 
@@ -30,6 +31,7 @@ public abstract class Hand extends CardList{
     public CardGamePlayer getPlayer(){return this.player;}
 
     /**public getter for top card of this hand
+     * Quad, FullHouse need to Overwrite it!!, because it's top card is quad, tri
      * @return topCard, type Card
      */
     public Card getTopCard(){
