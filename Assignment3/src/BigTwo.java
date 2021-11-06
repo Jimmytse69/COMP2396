@@ -6,7 +6,7 @@ import java.util.*;
  * @version 1.1
  * @date 19/10/2021 (starting v1.0); 5/11/2021 (starting v1.1)
  * v1.0: NullPointerException, instance var didn't initialize coursing it.
- * v1.1: fixing by redo checkmove(), but seems there are minor bug still.
+ * v1.1: fixing by redo checkmove(), resetCounter(pass) minor bug fix
  */
 
 public class BigTwo implements CardGame{
@@ -143,10 +143,14 @@ public class BigTwo implements CardGame{
 
         if (this.endOfGame() == true){      //check end game
             System.out.println("Game ends");
-            System.out.println("Player 0 has " + playerList.get(0).getNumOfCards() + " cards in hand.");
-            System.out.println("Player 1 has " + playerList.get(1).getNumOfCards() + " cards in hand.");
-            System.out.println("Player 2 has " + playerList.get(2).getNumOfCards() + " cards in hand.");
-            System.out.println("Player 3 has " + playerList.get(3).getNumOfCards() + " cards in hand.");
+            for (int i = 0; i < numOfPlayers; ++i){
+                if (i == (currentPlayerIdx - 1) % 4){   //[Empty] then next player will end the game, so it is previous player
+                    System.out.println("Player " + i + " wins the game.");
+                }
+                else{
+                    System.out.println("Player " + i + " has " + playerList.get(i).getNumOfCards() + " cards in hand.");
+                }
+            }
             System.exit(0);     //exit the game
         }
         
@@ -177,8 +181,6 @@ public class BigTwo implements CardGame{
                 if (hands.get(i).isValid()){
                     handType = hands.get(i).getType();
                     handTypeIdx = i;
-                    System.out.println(handType);
-
                 }
             }
             
@@ -205,6 +207,7 @@ public class BigTwo implements CardGame{
                 currentPlayerIdx = (playerIdx + 1) % 4;
                 handsOnTable.add(hands.get(handTypeIdx));   //add this Valid hand to table
                 playerList.get(playerIdx).removeCards(possibleCardList);
+                resetCounter = 0;
                 
             }
             else{
