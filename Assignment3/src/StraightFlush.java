@@ -30,8 +30,8 @@ public class StraightFlush extends Hand{
         int counter = 0;
         if (this.size() == 5){
             for (int i = 0; i < 4; ++i){
-                if (this.getCard(i).getRank() + 1 == this.getCard(i+1).getRank()){      //it is at least Striagth
-                    if (this.getCard(i).getSuit() == this.getCard(i+1).getSuit()){
+                if (bigTwoRank.indexOf(this.getCard(i).getRank()) + 1 == bigTwoRank.indexOf(this.getCard(i+1).getRank())){      //it is at least Striagth
+                    if (this.getCard(i).getSuit() == this.getCard(i+1).getSuit()){      //it is also Flush
                         counter += 1;
                     }
                 }

@@ -1,5 +1,3 @@
-import java.util.*;
-
 /**
  * This Quad is subclass of Hand class
  * @author Tse Chung Wan, 3035689324
