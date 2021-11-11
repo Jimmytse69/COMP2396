@@ -45,24 +45,24 @@ public abstract class Hand extends CardList{
      */
     public boolean beats(Hand hand){
 
-        int thisBig2Rank = (this.getTopCard().getRank() - 2) % 13;
-        int handBig2Rank = (hand.getTopCard().getRank() - 2) % 13;
-        if (thisBig2Rank < 0){
-            thisBig2Rank += 13;
+        int bigger = this.getTopCard().compareTo(hand.getTopCard());    //if same hand type, it is used to convert bool
+        boolean big = false;
+        boolean equal = false;
+        if (bigger > 0){
+            big = true;
         }
-        if (handBig2Rank < 0){
-            handBig2Rank += 13;
+        else if (bigger == 0){
+            equal = true;
         }
-        //Resolve bug in v1.0 mentioned in javaDoc in BigTwoDeck.compearTo
 
         if (this.size() == hand.size()){
             if (this.size() == 5){  //for card in 5, it is more complicated
                 if (this.getType() == "StraightFlush"){
                     if (hand.getType() == "StraightFlush"){
-                        if(thisBig2Rank > handBig2Rank){
+                        if(big){
                             return true;
                         }
-                        else if (thisBig2Rank == handBig2Rank){
+                        else if (equal){
                             if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
                                 return true;
                             }
@@ -83,7 +83,7 @@ public abstract class Hand extends CardList{
                         return false;
                     }
                     else if (hand.getType() == "Quad"){
-                        if (thisBig2Rank > handBig2Rank){
+                        if (big){
                             return true;
                         }
                         else{
@@ -99,7 +99,7 @@ public abstract class Hand extends CardList{
                         return false;
                     }
                     else if (hand.getType() == "FullHouse"){
-                        if (thisBig2Rank > handBig2Rank){
+                        if (big){
                             return true;
                         }
                         else{
@@ -119,7 +119,7 @@ public abstract class Hand extends CardList{
                             return true;
                         }
                         else if (this.getTopCard().getSuit() == hand.getTopCard().getSuit()){
-                            if (thisBig2Rank > handBig2Rank){
+                            if (big){
                                 return true;
                             }
                             else{
@@ -136,10 +136,10 @@ public abstract class Hand extends CardList{
                 }
                 else{   //it must be Straight or some strange bug
                     if (this.getType() == "Straight"){
-                        if (thisBig2Rank > handBig2Rank){
+                        if (big){
                             return true;
                         }
-                        else if (thisBig2Rank == handBig2Rank){
+                        else if (equal){
                             if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
                                 return true;
                             }
@@ -157,10 +157,10 @@ public abstract class Hand extends CardList{
                 }
             }
             else{       //for card size 1,2,3 => compare Top card rank then suit
-                if (thisBig2Rank > handBig2Rank){
+                if (big){
                     return true;
                 }
-                else if (thisBig2Rank == handBig2Rank){
+                else if (equal){
                     if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
                         return true;
                     }
