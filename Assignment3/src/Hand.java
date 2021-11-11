@@ -6,7 +6,7 @@
  * Should use .compareTo method to compare instead
  * (updated): not sure getTop is really the top, add .sort method to sort and get Top
  * (updated2): Only Quad need extra "top" treatment
- * @date 19/10/2021 (start ver1.0); 29/10/2021 (start ver1.1)
+ * @date 19/10/2021 (start ver1.0); 29/10/2021 (start ver1.1); 11/11/2021 (refactoring for A4&5)
  */
 
 public abstract class Hand extends CardList{
@@ -44,142 +44,112 @@ public abstract class Hand extends CardList{
      * @return true = beaten
      */
     public boolean beats(Hand hand){
-        int bigger = this.getTopCard().compareTo(hand.getTopCard());    //if same hand type, it is used to convert bool\
-        boolean big = false;
-        boolean equal = false;
-        if (bigger > 0){
-            big = true;
-        }
-        else if (bigger == 0){
-            equal = true;
-        }
-
-        if (this.getType() == "StraightFlush"){ //case of this.hand = StraightFlush
-            if (hand.getType() != "StraightFlush"){
-                return true; //beaten if this hand is StraightFlush but param's is not (StraightFlush is highest hand)
-            }
-            else{            
-                if (big){
-                    return true;
-                }
-                else if (equal){
-                    if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
+        if (this.size() == hand.size()){
+            if (this.size() == 5){  //for card in 5, it is more complicated
+                if (this.getType() == "StraightFlush"){
+                    if (hand.getType() == "StraightFlush"){
+                        if(this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                            return true;
+                        }
+                        else if (this.getTopCard().getRank() == hand.getTopCard().getRank()){
+                            if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
+                                return true;
+                            }
+                            else{
+                                return false;
+                            }
+                        }
+                        else{
+                            return false;
+                        }
+                    }
+                    else{   //StraightFlush nuts!!!
                         return true;
                     }
-                    return false;   //same type same rank, but this hand have lower/equal suit so it is not beaten param's hand
                 }
-                else{
-                    return false;   //same type lower rank always lose
-                }
-            }
-        }
-        else if (this.getType() == "Quad"){
-            if (hand.getType() == "StraightFlush"){
-                return false;   //always lose to StraightFlush
-            }
-            else if (hand.getType() == "Quad"){
-                if (big){
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            }
-            else{
-                return true;    //type is lower, so we win
-            }
-        }
-        else if (this.getType() == "FullHouse"){
-            if (hand.getType() == "StraightFlush" || hand.getType() == "Quad"){
-                return false;
-            }
-            else if (hand.getType() == "FullHouse"){
-                if (big){
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            }
-            else{
-                return true;
-            }
-        }
-        else if (this.getType() == "Flush"){
-            if (hand.getType() == "StraightFlush" || hand.getType() == "Quad" || hand.getType() == "FullHouse"){
-                return false;
-            }
-            else if (hand.getType() == "Flush"){
-                if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
-                    return true;
-                }
-                else if (this.getTopCard().getSuit() == hand.getTopCard().getSuit()){
-                    if (big){
+                else if (this.getType() == "Quad"){
+                    if (hand.getType() == "StraightFlush"){
+                        return false;
+                    }
+                    else if (hand.getType() == "Quad"){
+                        if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                            return true;
+                        }
+                        else{
+                            return false;
+                        }
+                    }
+                    else{
                         return true;
+                    }
+                }
+                else if (this.getType() == "FullHouse"){
+                    if (hand.getType() == "StraightFlush" || hand.getType() == "Quad"){
+                        return false;
+                    }
+                    else if (hand.getType() == "FullHouse"){
+                        if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                            return true;
+                        }
+                        else{
+                            return false;
+                        }
+                    }
+                    else{
+                        return true;
+                    }
+                }
+                else if (this.getType() == "Flush"){
+                    if (hand.getType() == "Straight"){
+                        return true;
+                    }
+                    else if (hand.getType() == "Flush"){
+                        if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
+                            return true;
+                        }
+                        else if (this.getTopCard().getSuit() == hand.getTopCard().getSuit()){
+                            if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                                return true;
+                            }
+                            else{
+                                return false;
+                            }
+                        }
+                        else{
+                            return false;
+                        }
                     }
                     else{
                         return false;
                     }
                 }
-                else{
-                    return false;
-                }
-            }
-            else{
-                return true;    //beaten lower type
-            }
-        }
-        else if (this.getType() == "Straight"){
-            if (hand.getType() == "StraightFlush" || hand.getType() == "Quad" || hand.getType() == "FullHouse" || hand.getType() == "Flush"){
-                return false;
-            }
-            else if (hand.getType() == "Straight"){
-                if (big){
-                    return true;
-                }
-                else if (equal){
-                    if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
-                        return true;
+                else{   //it must be Straight or some strange bug
+                    if (this.getType() == "Straight"){
+                        if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
+                            return true;
+                        }
+                        else if (this.getTopCard().getRank() == hand.getTopCard().getRank()){
+                            if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
+                                return true;
+                            }
+                            else{
+                                return false;
+                            }
+                        }
+                        else{
+                            return false;
+                        }
                     }
                     else{
                         return false;
                     }
                 }
-                else{
-                    return false;
-                }
             }
-            else{
-                return true;    //beaten lower type
-            }
-        }
-        else if (this.getType() == "Triple"){
-            if (hand.getType() == "StraightFlush" || hand.getType() == "Quad" || hand.getType() == "FullHouse" || 
-                hand.getType() == "Flush"         || hand.getType() == "Straight" ){
-                return false;
-            }
-            else if (hand.getType() == "Triple"){
-                if (big){
+            else{       //for card size 1,2,3 => compare Top card rank then suit
+                if (this.getTopCard().getRank() > hand.getTopCard().getRank()){
                     return true;
                 }
-                else{
-                    return false;
-                }
-            }
-            else{
-                return true;
-            }
-        }
-        else if (this.getType() == "Pair"){
-            if (hand.getType() == "StraightFlush" || hand.getType() == "Quad"       || hand.getType() == "FullHouse" || 
-                hand.getType() == "Flush"         || hand.getType() == "Straight"   || hand.getType() == "Triple"){
-                return false;
-            }
-            else if (hand.getType() == "Pair"){
-                if (big){
-                    return true;
-                }
-                else if (equal){
+                else if (this.getTopCard().getRank() == hand.getTopCard().getRank()){
                     if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
                         return true;
                     }
@@ -191,30 +161,9 @@ public abstract class Hand extends CardList{
                     return false;
                 }
             }
-            else{
-                return true;    //beaten Single type
-            }
         }
-        else{   //only left Single class
-            if (hand.getType() == "Single"){
-                if (big){
-                    return true;
-                }
-                else if (equal){
-                    if (this.getTopCard().getSuit() > hand.getTopCard().getSuit()){
-                        return true;
-                    }
-                    else{
-                        return false;
-                    }
-                }
-                else{
-                    return false;
-                }
-            }
-            else{
-                return false;   //it lose to any other hand types
-            }
+        else{
+            return false;   //2 not equal size of hand is not comparible (it is redo after done BigTwo refactoring)
         }
     }
 
