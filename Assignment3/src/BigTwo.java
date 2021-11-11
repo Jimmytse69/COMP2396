@@ -144,13 +144,17 @@ class BigTwo {
                     cards.addCard(playerList.get(playerIdx).getCardsInHand().getCard(cardIdx[i]));     
                 }
                 Hand tryComposeHand = composeHand(playerList.get(playerIdx), cards);
-                boolean validHand = false;  //to indicate the tryComposeHand is a ok move
 
                 //so it is your first turn and try to play sth
                 if (handsOnTable.size() == 0){
                     //if it contains diamond 3 and make a valid move, it must be a ok move
                     if (tryComposeHand != null && cards.contains(new Card(0, 2))){
-                        validHand = true;
+                        handsOnTable.add(tryComposeHand);
+                        playerList.get(playerIdx).removeCards(cards);
+                        currentPlayerIdx = (playerIdx + 1) % 4;
+                    }
+                    else{
+                        System.out.println("Not a legal move!!!");
                     }
                 }
                 //so it is not first turn and you try to play sth; if logic: not a and not b
@@ -158,34 +162,37 @@ class BigTwo {
                     //when you make move, and the Top handsOnTable are also made by you, so you can freely choose your hand type
                     if (handsOnTable.get(handsOnTable.size() - 1).getPlayer() == playerList.get(playerIdx)){ 
                         if (tryComposeHand != null){
-                            validHand = true;
+                            handsOnTable.add(tryComposeHand);
+                            playerList.get(playerIdx).removeCards(cards);
+                            currentPlayerIdx = (playerIdx + 1) % 4;
+                        }
+                        else{
+                            System.out.println("Not a legal move!!!");
                         }
                     }
                     //you need to follow the beat rule to beat Top handsOnTable
                     else{
                         if (tryComposeHand != null){
                             if (tryComposeHand.beats(handsOnTable.get(handsOnTable.size() - 1))){
-                                validHand = true;
+                                handsOnTable.add(tryComposeHand);
+                                playerList.get(playerIdx).removeCards(cards);
+                                currentPlayerIdx = (playerIdx + 1) % 4;
                             }
+                            else{
+                                System.out.println("Not a legal move!!!");
+                            }
+                        }
+                        else{
+                            System.out.println("Not a legal move!!!");
+                        }
                     }
-                    }
-
-                if(validHand){
-                    handsOnTable.add(tryComposeHand);
-                    playerList.get(playerIdx).removeCards(cards);
-                    currentPlayerIdx = (playerIdx + 1) % 4;
-                }
-                else{
-                    System.out.println("Not a legal move!!!");
                 }
             }
-
-            ui.setActivePlayer(currentPlayerIdx);
-            ui.repaint();
-            ui.promptActivePlayer();
+        ui.setActivePlayer(currentPlayerIdx);
+        ui.repaint();
+        ui.promptActivePlayer();
         }
     }
-}
 
     /**public method for checking if the game ends. */  
     boolean endOfGame(){
