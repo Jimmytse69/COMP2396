@@ -41,18 +41,10 @@ public class BigTwoHandTester {
         CardList cards1, cards2;
 
         cards1 = new CardList();
-        cards1.addCard(new BigTwoCard(1, 7));
-        cards1.addCard(new BigTwoCard(1, 7));
-        cards1.addCard(new BigTwoCard(1, 7));
-        cards1.addCard(new BigTwoCard(0, 2));
-        cards1.addCard(new BigTwoCard(0, 2));
+        cards1.addCard(new BigTwoCard(0, 0));
 
         cards2 = new CardList();
-        cards2.addCard(new BigTwoCard(0, 6));
-        cards2.addCard(new BigTwoCard(0, 6));
-        cards2.addCard(new BigTwoCard(0, 6));
-        cards2.addCard(new BigTwoCard(1, 2));
-        cards2.addCard(new BigTwoCard(0, 2));
+        cards2.addCard(new BigTwoCard(3, 12));
 
         composeAndCompare(cards1, cards2);
 
