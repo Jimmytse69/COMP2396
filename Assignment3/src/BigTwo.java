@@ -120,8 +120,7 @@ class BigTwo {
 
     /**public method for checking a move made by player. Supposed to called from makeMove() method. */
     void checkMove(int playerIdx, int[] cardIdx){
-        if (!endOfGame()){      //if game still not end, it keep running
-            
+            boolean valid = false;
             if (cardIdx == null){   //you intended to pass
                 if (handsOnTable.size() == 0){  //can't skip in 1st round
                     System.out.println("Not a legal move!!!");
@@ -133,7 +132,9 @@ class BigTwo {
                     }
                     else{
                         System.out.println("{Pass}");
+                        System.out.println();
                         currentPlayerIdx = (playerIdx + 1) % 4;     //it is looping 0-3, ++ 1
+                        valid = true;
                     }
                 }
             }
@@ -152,6 +153,10 @@ class BigTwo {
                         handsOnTable.add(tryComposeHand);
                         playerList.get(playerIdx).removeCards(cards);
                         currentPlayerIdx = (playerIdx + 1) % 4;
+                        System.out.print("{" + tryComposeHand.getType() + "} ");
+                        tryComposeHand.print();
+                        System.out.println();
+                        valid = true;
                     }
                     else{
                         System.out.println("Not a legal move!!!");
@@ -165,6 +170,10 @@ class BigTwo {
                             handsOnTable.add(tryComposeHand);
                             playerList.get(playerIdx).removeCards(cards);
                             currentPlayerIdx = (playerIdx + 1) % 4;
+                            System.out.print("{" + tryComposeHand.getType() + "} ");
+                            tryComposeHand.print();
+                            System.out.println();
+                            valid = true;
                         }
                         else{
                             System.out.println("Not a legal move!!!");
@@ -177,6 +186,10 @@ class BigTwo {
                                 handsOnTable.add(tryComposeHand);
                                 playerList.get(playerIdx).removeCards(cards);
                                 currentPlayerIdx = (playerIdx + 1) % 4;
+                                System.out.print("{" + tryComposeHand.getType() + "} ");
+                                tryComposeHand.print();
+                                System.out.println();
+                                valid = true;
                             }
                             else{
                                 System.out.println("Not a legal move!!!");
@@ -189,8 +202,11 @@ class BigTwo {
                 }
             }
         ui.setActivePlayer(currentPlayerIdx);
-        ui.repaint();
-        ui.promptActivePlayer();
+        if (!endOfGame()){
+            if (valid){
+                ui.repaint();
+            }
+            ui.promptActivePlayer();
         }
     }
 
@@ -203,6 +219,25 @@ class BigTwo {
             }
         }
         if (winner != -1){  //someone actually win and end the game
+
+            
+            
+            for (int i = 0; i < 4; ++i){
+                System.out.println("<" + playerList.get(i).getName() + ">");
+                System.out.print("    ");
+				playerList.get(i).getCardsInHand().print(true, true);
+            }
+            System.out.println("<Table>");
+            Hand lastHandOnTable = (handsOnTable.isEmpty()) ? null : handsOnTable.get(handsOnTable.size() - 1);
+            if (lastHandOnTable != null) {
+                System.out
+                        .print("    <" + lastHandOnTable.getPlayer().getName() + "> {" + lastHandOnTable.getType() + "} ");
+                lastHandOnTable.print(true, false);
+            } else {
+                System.out.println("  [Empty]");
+            }
+            System.out.println();
+
             System.out.println("Game ends");
             for (int i = 0; i < numOfPlayers; ++i){
                 if (winner != i){
