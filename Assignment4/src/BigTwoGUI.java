@@ -21,6 +21,10 @@ public class BigTwoGUI implements CardGameUI{
     private JTextArea chatArea = new JTextArea();
     private JTextField chatInput = new JTextField();
 
+    static private JFrame initializeFrame(){
+        
+    }
+
     /**
      * a method for setting the index of the active player (i.e. who have the control of GUI)
      * @Override
@@ -107,7 +111,12 @@ public class BigTwoGUI implements CardGameUI{
     }
 
     class QuitMenuItemListener{
-        
+
+    }
+
+    class ChatBox {
+        private JTextField chatInput;
+        private JTextArea chatmsag
     }
     
 }
