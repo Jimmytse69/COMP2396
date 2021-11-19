@@ -31,7 +31,7 @@ class BigTwo {
     private ArrayList<CardGamePlayer> playerList = new ArrayList<CardGamePlayer>();
     private ArrayList<Hand> handsOnTable = new ArrayList<Hand>();
     private int currentPlayerIdx = 0;
-    private BigTwoUI ui = new BigTwoUI(this);
+    private BigTwoGUI ui = new BigTwoGUI(this);
 
     /**public getter of number of player (private attributes) 
      * @return numOfPlayers, int type

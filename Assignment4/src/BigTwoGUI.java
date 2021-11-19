@@ -7,13 +7,16 @@ public class BigTwoGUI implements CardGameUI{
      * @param game
      */
     public BigTwoGUI (BigTwo game){
+        frame.add(bigTwoPanel);
+        frame.setSize(300, 300);
+        frame.setVisible(true);
     }
 
     //private instance variables:
     private BigTwo game = new BigTwo();
     private boolean[] selected = new boolean[13];
     private int activePlayer = 0;
-    private JFrame fram = new JFrame();
+    private JFrame frame = new JFrame();
     private JPanel bigTwoPanel = new JPanel();
     private JButton playerButton = new JButton();
     private JButton passButton = new JButton();
@@ -21,9 +24,6 @@ public class BigTwoGUI implements CardGameUI{
     private JTextArea chatArea = new JTextArea();
     private JTextField chatInput = new JTextField();
 
-    static private JFrame initializeFrame(){
-        
-    }
 
     /**
      * a method for setting the index of the active player (i.e. who have the control of GUI)
@@ -112,11 +112,6 @@ public class BigTwoGUI implements CardGameUI{
 
     class QuitMenuItemListener{
 
-    }
-
-    class ChatBox {
-        private JTextField chatInput;
-        private JTextArea chatmsag
     }
     
 }
