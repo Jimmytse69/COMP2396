@@ -24,9 +24,9 @@ public class SimpleAnimation {
 			x++;
 			y++;
 			animPanel.repaint();
-
+	
 			try {
-				Thread.sleep(50);
+					Thread.sleep(50);
 			} catch (Exception ex) { }
 		}
 	} // close go() method

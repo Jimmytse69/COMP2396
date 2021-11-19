@@ -3,7 +3,10 @@ import javax.swing.*;
 
 public class MyDrawPanel extends JPanel {
     public void paintComponent(Graphics g){
-        Image image = new ImageIcon("kelvin.jpg").getImage();
-        g.drawImage(image, 3, 4, this);
+        Graphics2D g2D = (Graphics2D) g;
+        GradientPaint paint = new GradientPaint(70, 70, Color.BLUE, 100, 150, Color.ORANGE);
+
+        g2D.setPaint(paint);
+        g2D.fillOval(70, 70, 100, 100);
     }
 }
