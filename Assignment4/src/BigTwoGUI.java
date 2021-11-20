@@ -1,28 +1,72 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class BigTwoGUI implements CardGameUI{
+
+    //private instance variables:
+    private BigTwo game;
+    private boolean[] selected = new boolean[13]; 
+    private int activePlayer;
+    private JFrame frame;
+    private JPanel bigTwoPanel;
+    private JButton playerButton;
+    private JButton passButton;
+    private JTextArea msgArea;
+    //this include chatArea and input
+    private ChatBox chat;
 
     /**
      * public constructor for creating a BigTwoGUI. The param is reference to a Big Two card game asscoiates with it
      * @param game
      */
     public BigTwoGUI (BigTwo game){
-        frame.add(bigTwoPanel);
-        frame.setSize(300, 300);
+        this.game = game;
+        
+        frame = frameInit();
+
+        chat = chatInit();
+        frame.add(chat);
+        //this is the real show!!!, only this .setVisible will update the frame
         frame.setVisible(true);
+        
+
+        
+        
+        
+        
     }
 
-    //private instance variables:
-    private BigTwo game = new BigTwo();
-    private boolean[] selected = new boolean[13];
-    private int activePlayer = 0;
-    private JFrame frame = new JFrame();
-    private JPanel bigTwoPanel = new JPanel();
-    private JButton playerButton = new JButton();
-    private JButton passButton = new JButton();
-    private JTextArea msgArea = new JTextArea();
-    private JTextArea chatArea = new JTextArea();
-    private JTextField chatInput = new JTextField();
+    //init of frame obj
+    static private JFrame frameInit(){
+        JFrame frame = new JFrame();
+        frame.setTitle("Big2");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setSize(900, 900);    //fixed size of 900*900
+        
+        ImageIcon image = new ImageIcon("image/icon/icon.png");
+        frame.setIconImage(image.getImage());
+
+        
+
+        return frame;
+    }
+
+    //inti of chat box
+    static private ChatBox chatInit(){
+        ChatBox chat = new ChatBox();
+        
+        return chat;
+    }
+
+    //private JPanel createChatPanel() {
+    //    JPanel chatPanel = new JPanel();
+    //    chatPanel.setLayout(new BorderLayout());
+    //    ChatBox chat = chatInit();
+    //    chatPanel.add(chat.getChatArea());
+    //    chatPanel.add(chat.getChatInput());
+    //    return chatPanel;
+    //}
 
 
     /**
@@ -31,6 +75,11 @@ public class BigTwoGUI implements CardGameUI{
      * @param activePlayer (int)
      */
     public void setActivePlayer(int activePlayer) {
+        if (activePlayer < 0 || activePlayer >= game.getPlayerList().size()) {
+			this.activePlayer = -1;
+		} else {
+			this.activePlayer = activePlayer;
+		}
     }
 
     /**
@@ -39,6 +88,7 @@ public class BigTwoGUI implements CardGameUI{
      */
     
     public void repaint() {
+        
     }
 
     /**
@@ -91,6 +141,10 @@ public class BigTwoGUI implements CardGameUI{
      * a message should be displayed in the msg area showing it is his/her turn
      */
     public void promptActivePlayer() {
+        printMsg(game.getPlayerList().get(activePlayer).getName() + "'s turn: ");
+		//int[] cardIdx = getSelected();
+		//resetSelected();
+		//game.makeMove(activePlayer, cardIdx);
     }
 
     //inner class
@@ -113,5 +167,28 @@ public class BigTwoGUI implements CardGameUI{
     class QuitMenuItemListener{
 
     }
+
+    //ref https://stackoverflow.com/questions/9560600/java-no-enclosing-instance-of-type-foo-is-accessible/9560660
+    static class ChatBox extends JPanel{
+        private JTextArea chatArea;
+        private JTextField chatInput;
+        private static final int CHAT_COL = 50;
+
+        public ChatBox(){
+            chatArea = new JTextArea("Welcome to Chat Room", 10, CHAT_COL);
+            chatInput = new JTextField(CHAT_COL);
+            add(chatArea);
+            add(chatInput);
+        }
+
+        public JTextField getChatInput(){
+            return this.chatInput;
+        }
+        public JTextArea getChatArea(){
+            return this.chatArea;
+        }
+        
+    }
     
 }
+

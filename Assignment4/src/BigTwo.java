@@ -23,6 +23,7 @@ class BigTwo {
         playerList.add(new CardGamePlayer("Player2"));
         playerList.add(new CardGamePlayer("Player3"));
         //(ii) is done in initiallize private instance var. process
+        this.gui = new BigTwoGUI(this);
     }
 
     //private instance vairbles
@@ -31,7 +32,7 @@ class BigTwo {
     private ArrayList<CardGamePlayer> playerList = new ArrayList<CardGamePlayer>();
     private ArrayList<Hand> handsOnTable = new ArrayList<Hand>();
     private int currentPlayerIdx = 0;
-    private BigTwoGUI ui = new BigTwoGUI(this);
+    private BigTwoGUI gui;
 
     /**public getter of number of player (private attributes) 
      * @return numOfPlayers, int type
@@ -97,15 +98,15 @@ class BigTwo {
         for (int i = 0; i < numOfPlayers; ++i){
             if (playerList.get(i).getCardsInHand().contains(new Card(0, 2))){
                     currentPlayerIdx = i;
-                    ui.setActivePlayer(i);
+                    gui.setActivePlayer(i);
             }
         }
 
         //(v)
-        ui.repaint();
+        gui.repaint();
 
         //(vi)
-        ui.promptActivePlayer();
+        gui.promptActivePlayer();
     }
 
     /**public method for makeing a move by player 
@@ -200,12 +201,12 @@ class BigTwo {
                     }
                 }
             }
-        ui.setActivePlayer(currentPlayerIdx);
+        gui.setActivePlayer(currentPlayerIdx);
         if (!endOfGame()){
             if (valid){
-                ui.repaint();
+                gui.repaint();
             }
-            ui.promptActivePlayer();
+            gui.promptActivePlayer();
         }
     }
 
@@ -268,6 +269,7 @@ class BigTwo {
 
         //(iii)
         game.start(deck);
+
     }
     
 
