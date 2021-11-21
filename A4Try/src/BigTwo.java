@@ -3,8 +3,8 @@ import java.util.*;
 /**
  * This BigTwo class is used to model a Big Two card game, the instance variables and methods detail are shown below.
  * @author Tse Chung Wan, 3035689324
- * @version 1.2
- * @date 19/10/2021 (starting v1.0); 5/11/2021 (starting v1.1); 6/11/2021 (starting v1.2); 11/11/2021 ("refactored" for Assignment 4&5)
+ * @version 1.3
+ * @date 19/10/2021 (starting v1.0); 5/11/2021 (starting v1.1); 6/11/2021 (starting v1.2); 11/11/2021 ("refactored" for Assignment 4&5); 21/11/2021 (update for Assignment 4)
  * v1.0: NullPointerException, instance var didn't initialize coursing it.
  * v1.1: fixing by redo checkmove(), resetCounter(pass) minor bug fix
  * (minor bug unfix: player with diamond 3 cannot pass in first turn)
@@ -12,6 +12,11 @@ import java.util.*;
  */
 
 class BigTwo {
+
+    private static final String[] SUITS = { "\u2666", "\u2663", "\u2665", "\u2660" }; // {Diamond, Club, Heart, Spade}
+	private static final String[] RANKS = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "0", "J", "Q", "K" };
+
+
     /**Construstor for creating a Big Two card game. There are 2 procedures:
      * (i) : create 4 players and add them to player list
      * (ii): create a BigTwoUI object for user interface.
@@ -103,9 +108,9 @@ class BigTwo {
         }
 
         
+
         //(v)
         gui.repaint();
-
 
         //(vi)
         gui.promptActivePlayer();
@@ -127,14 +132,17 @@ class BigTwo {
             if (cardIdx == null){   //you intended to pass
                 if (handsOnTable.size() == 0){  //can't skip in 1st round
                     System.out.println("Not a legal move!!!");
+                    gui.printMsg("Not a legal move!!!\n");
                 }
                 else{
                     if (handsOnTable.get(handsOnTable.size() - 1).getPlayer() == playerList.get(playerIdx)){
                         //cannot pass bc you are the one who play the table hand
                         System.out.println("Not a legal move!!!");
+                        gui.printMsg("Not a legal move!!!\n");
                     }
                     else{
                         System.out.println("{Pass}");
+                        gui.printMsg("{Pass}\n");
                         currentPlayerIdx = (playerIdx + 1) % 4;     //it is looping 0-3, ++ 1
                         valid = true;
                     }
@@ -162,6 +170,7 @@ class BigTwo {
                     }
                     else{
                         System.out.println("Not a legal move!!!");
+                        gui.printMsg("Not a legal move!!!\n");
                     }
                 }
                 //so it is not first turn and you try to play sth; if logic: not a and not b
@@ -179,6 +188,7 @@ class BigTwo {
                         }
                         else{
                             System.out.println("Not a legal move!!!");
+                            gui.printMsg("Not a legal move!!!\n");
                         }
                     }
                     //you need to follow the beat rule to beat Top handsOnTable
@@ -195,10 +205,12 @@ class BigTwo {
                             }
                             else{
                                 System.out.println("Not a legal move!!!");
+                                gui.printMsg("Not a legal move!!!\n");
                             }
                         }
                         else{
                             System.out.println("Not a legal move!!!");
+                            gui.printMsg("Not a legal move!!!\n");
                         }
                     }
                 }
@@ -207,6 +219,16 @@ class BigTwo {
         if (!endOfGame()){
             if (valid){
                 gui.repaint();
+                //from BigTwoUI
+                Hand lastHandOnTable = (handsOnTable.isEmpty()) ? null : handsOnTable.get(handsOnTable.size() - 1);
+                if (lastHandOnTable != null && cardIdx != null) {
+                    gui.printMsg("{" + lastHandOnTable.getType() + "} ");
+                    for (int i = 0; i < lastHandOnTable.size(); ++i){
+                        gui.printMsg("[" + SUITS[lastHandOnTable.getCard(i).getSuit()] + RANKS[lastHandOnTable.getCard(i).getRank()] + "]");
+                    }
+                    gui.printMsg("\n");
+                    lastHandOnTable.print(true, false);
+                }
             }
             gui.promptActivePlayer();
         }

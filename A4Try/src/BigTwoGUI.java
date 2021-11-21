@@ -1,3 +1,13 @@
+/**
+ * This is GUI class for Big2 Game
+ * @author Tse Chung Wan, 3035689324
+ * @version 1.0, 21/11/2021
+ * comment: playable, but
+ * 1. not resizable (disabled)
+ * 2. bug on EAST Panel (chat and msg area not "fixed", possible fixed by scoller)
+ */
+
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -29,7 +39,7 @@ public class BigTwoGUI implements CardGameUI{
         setActivePlayer(game.getCurrentPlayerIdx());
     }
 
-
+    //private for frame initization
     private JFrame frameInit() {
         JFrame frame = new JFrame();
         frame.setLayout(new BorderLayout());
@@ -67,13 +77,21 @@ public class BigTwoGUI implements CardGameUI{
     //set Menu bar by passed a frame
     private void setMenu(JFrame frame){
         JMenuItem restart = new JMenuItem("Restart");
+        new RestartMenuItemListener(restart);
         JMenuItem quit = new JMenuItem("Quit");
+        new QuitMenuItemListener(quit);
+
         JMenu game = new JMenu("Game");
 
         game.add(restart);
         game.add(quit);
 
+        JMenuItem clear = new JMenuItem("Clear");
+        new ClearMsgItemListener(clear);
+
         JMenu msg = new JMenu("Message");
+        msg.add(clear);
+
         JMenuBar m = new JMenuBar();
         m.add(game);
         m.add(msg);
@@ -86,11 +104,13 @@ public class BigTwoGUI implements CardGameUI{
         frame.add(msgPanel, BorderLayout.EAST);
     }
 
+    //setup buttonPanel to frame
     private void setButtonPanel(JFrame frame){
         buttonPanelInit();
         frame.add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    //setup button widget to panel
     private void buttonPanelInit(){
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
@@ -118,32 +138,47 @@ public class BigTwoGUI implements CardGameUI{
         //cope with text "Overflow" layout problem: https://stackoverflow.com/questions/22914775/how-to-set-jtextarea-to-fixed-size/22914880
         msgArea.setLineWrap(true);
 
+        
         msgArea.setFont(new Font("TimesRoman", Font.PLAIN, 14));
         msgArea.setEditable(false);
         msgArea.setBackground(Color.PINK);
-        msgArea.append("Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123");
+        //msgArea.append("Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123Mic Testing 123");
         
-        p.add(msgArea);
+        //no idea why still cannot autoscroll, ref: https://stackoverflow.com/questions/2483572/making-a-jscrollpane-automatically-scroll-all-the-way-down
+        msgArea.setCaretPosition(msgArea.getDocument().getLength());
+        JScrollPane sp = new JScrollPane(msgArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        sp.setAutoscrolls(true);
+
+        p.add(sp);
     }
 
     //set Chat Area and Input by passing a msg panel
     private void setChat(JPanel p) {
         //Chat Area adding
-        chatArea = new JTextArea("Welcome to Chat", 20, 25);
+        chatArea = new JTextArea("Welcome to Chat\n", 20, 25);
         chatArea.setLineWrap(true);
+
 
         chatArea.setFont(new Font("TimesRoman", Font.PLAIN, 14));
         chatArea.setEditable(false);
         chatArea.setBackground(Color.CYAN);
+
+        //no idea why still cannot autoscroll, ref: https://stackoverflow.com/questions/2483572/making-a-jscrollpane-automatically-scroll-all-the-way-down
+        chatArea.setCaretPosition(chatArea.getDocument().getLength());
+        JScrollPane sp2 = new JScrollPane(chatArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        sp2.setAutoscrolls(true);
         
-        p.add(chatArea);
+        p.add(sp2);
 
         //Chat Input adding
-        chatInput = new JTextField("Mic Testing 123", 25);
+        chatInput = new JTextField("Send message here", 25);
+        new ChatInputListener(chatInput);
 
         chatInput.setFont(new Font("TimesRoman", Font.PLAIN, 14));
         chatInput.setEditable(true);
-        chatInput.setBackground(Color.RED);
+        chatInput.setBackground(Color.LIGHT_GRAY);
+
+        
         
         p.add(chatInput);
 
@@ -153,8 +188,8 @@ public class BigTwoGUI implements CardGameUI{
         playButton = new JButton("Play");
         passButton = new JButton("Pass");
 
-        PlayButtonListener pl = new PlayButtonListener(playButton);
-
+        new PlayButtonListener(playButton);
+        new PassButtonListener(passButton);
 
         p.add(playButton);
         p.add(passButton);
@@ -268,7 +303,7 @@ public class BigTwoGUI implements CardGameUI{
      */
     public void promptActivePlayer() {
         setActivePlayer(activePlayer);
-        msgArea.append("It is your turn, Player " + activePlayer);
+        msgArea.append("Player " + activePlayer + "'s turn:" + "\n");
     }
 
     private class PlayButtonListener implements ActionListener{
@@ -278,9 +313,28 @@ public class BigTwoGUI implements CardGameUI{
         }
 
         @Override
+        /**
+         * player button action event handling
+         * @param e
+         */
         public void actionPerformed(ActionEvent e) {
-            System.out.println("I have been clicked");
+            //System.out.println("I have been clicked");
 
+            int[] cardSelected = getCardSelected();
+            resetCardPosition();
+
+            game.makeMove(activePlayer, cardSelected);
+            
+        }
+
+
+        private void resetCardPosition() {
+            for (int i = 0; i < selected.length; ++i){
+                selected[i] = false;
+            }
+        }
+
+        private int[] getCardSelected(){
             int[] cardSelected;
             int count = 0;
             for (int i = 0; i < selected.length; ++i) {
@@ -302,23 +356,123 @@ public class BigTwoGUI implements CardGameUI{
                     }
                 }
             }
-
-            game.makeMove(activePlayer, cardSelected);
-            
+            return cardSelected;
         }
 
     }
 
-    class PassButtonListener{
+    private class PassButtonListener implements ActionListener{
+        
+        
+        PassButtonListener(JButton b){
+            b.addActionListener(this);
+        }
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //System.out.println("Is me, Pass button");
+            resetCardPosition();
+            game.makeMove(activePlayer, null);
+        }
+        private void resetCardPosition() {
+            for (int i = 0; i < selected.length; ++i){
+                selected[i] = false;
+            }
+        }
+        
+    }
+
+    private class ChatInputListener implements KeyListener{
+
+        ChatInputListener(JTextField chatInput){
+            chatInput.addKeyListener(this);
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            // TODO Auto-generated method stub
+            if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                String msg = chatInput.getText();
+                chatArea.append("Player " + activePlayer + ": " + msg + "\n");
+                chatInput.setText("");
+            }
+            
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
 
     }
     
-    class RestartMenuItemListener{
+    private class RestartMenuItemListener implements ActionListener{
+
+        RestartMenuItemListener(JMenuItem jmi){
+            jmi.addActionListener(this);
+        }
+
+        @Override
+        /**
+         * restart the game when this menuitem pressed
+         * (i)  create a new BigTwoDeck obj and call shuffle
+         * (ii) call the start() from game with (i) obj as arg
+         * @param ActionEvent e
+         */
+        public void actionPerformed(ActionEvent e) {
+            // TODO Auto-generated method stub
+            //(i)
+            BigTwoDeck d = new BigTwoDeck();
+            d.shuffle();
+
+            //(ii)
+            msgArea.append("Game Restarted!\n");
+            game.start(d);
+        }
 
     }
 
-    class QuitMenuItemListener{
+    private class QuitMenuItemListener implements ActionListener{
 
+        QuitMenuItemListener(JMenuItem jmi){
+            jmi.addActionListener(this);
+        }
+
+        @Override
+        /**
+         * terminate program
+         * @param e ActionEvent
+         */
+        public void actionPerformed(ActionEvent e) {
+            // TODO Auto-generated method stub
+            System.exit(0);
+        }
+
+    }
+
+    //additional MenuItem Clear Msg
+    private class ClearMsgItemListener implements ActionListener{
+
+        ClearMsgItemListener(JMenuItem jmi){
+            jmi.addActionListener(this);
+        }
+
+        @Override
+        /**
+         * clear system msg from msgArea
+         * @param e ActionEvent
+         */
+        public void actionPerformed(ActionEvent e) {
+            // TODO Auto-generated method stub
+            clearMsgArea();
+        }
+        
     }
 
     private class BigTwoPanel extends JPanel implements MouseListener{
@@ -326,8 +480,9 @@ public class BigTwoGUI implements CardGameUI{
         private final String[] RANKS = { "a", "2", "3", "4", "5", "6", "7", "8", "9", "t", "j", "q", "k"};
     
         private final int avaterWidth = 60;
-        private final int avaterHeight = 60;
-        private final int cardWidth = 73;
+        //not used now:
+        //private final int avaterHeight = 60;
+        //private final int cardWidth = 73;
         private final int cardHeight = 97;
 
         private final Image avater = new ImageIcon("src/image/avater/a.png").getImage();
@@ -343,12 +498,7 @@ public class BigTwoGUI implements CardGameUI{
             this.addMouseListener(this);
             
             this.setCards();
-            //this.setPlayer0Panel();
-            //this.setPlayer1Panel();
-            //this.setPlayer2Panel();
-            //this.setPlayer3Panel();
-            //this.setTablePanel();
-
+            
         }
 
         private void setCards() {
@@ -359,6 +509,10 @@ public class BigTwoGUI implements CardGameUI{
             }
         }
 
+        /**
+         * painting the screen of Table Panel
+         * @param Graphics g
+         */
         public void paintComponent(Graphics g){
             Graphics2D g2D = (Graphics2D) g;
             g2D.setColor(new Color(0x35654d));
@@ -372,6 +526,9 @@ public class BigTwoGUI implements CardGameUI{
                 g2D.drawImage(avater, 10, 40 + (i*120), this);
             }
             g2D.drawString("Table", 10, 30 + (4 * 120));
+            if (!game.getHandsOnTable().isEmpty()){
+                g2D.drawString(game.getHandsOnTable().get(game.getHandsOnTable().size() - 1).getPlayer().getName(), 10, 30 + (4 * 120) + 20);
+            }
 
             //draw cards
             for (int j = 0; j < game.getNumOfPlayers(); ++j){
@@ -399,11 +556,28 @@ public class BigTwoGUI implements CardGameUI{
                     }
                 }
             }
+
+            //draw Table
+            if (!game.getHandsOnTable().isEmpty()){
+                for (int i = 0; i < game.getHandsOnTable().get(game.getHandsOnTable().size() - 1).size(); ++i){
+                    //Table curRank and Suit
+                    int curRank = game.getHandsOnTable().get(game.getHandsOnTable().size() - 1).getCard(i).getRank();
+                    int curSuit = game.getHandsOnTable().get(game.getHandsOnTable().size() - 1).getCard(i).getSuit();
+
+                    g2D.drawImage(cards[curRank][curSuit], avaterWidth + 20 + (i * 40), 30 + (4*120), this);
+                }
+                super.repaint();
+            }
+
             
         }
 
         @Override
         //ref: Moodle and https://stackoverflow.com/questions/12396066/how-to-get-location-of-a-mouse-click-relative-to-a-swing-window
+        /**
+         * Overriding method for MouseEvent handling of Selcet card
+         * @param MouseEvent e
+         */
         public void mouseClicked(MouseEvent e) {
             int x=e.getX();
             int y=e.getY();
