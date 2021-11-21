@@ -1,5 +1,8 @@
+import javax.imageio.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
 
 public class BigTwoGUI implements CardGameUI{
 
@@ -25,7 +28,14 @@ public class BigTwoGUI implements CardGameUI{
         frame = frameInit();
 
         chat = chatInit();
-        frame.add(chat);
+        
+        frame.setLayout(new BorderLayout());
+        frame.add(chat, BorderLayout.EAST);
+        
+
+
+        //bigTwoPanel = big2Init();
+        //frame.add(bigTwoPanel);
         //this is the real show!!!, only this .setVisible will update the frame
         frame.setVisible(true);
         
@@ -44,6 +54,9 @@ public class BigTwoGUI implements CardGameUI{
         frame.setResizable(false);
         frame.setSize(900, 900);    //fixed size of 900*900
         
+
+        
+        
         ImageIcon image = new ImageIcon("image/icon/icon.png");
         frame.setIconImage(image.getImage());
 
@@ -55,18 +68,16 @@ public class BigTwoGUI implements CardGameUI{
     //inti of chat box
     static private ChatBox chatInit(){
         ChatBox chat = new ChatBox();
-        
+        chat.setLayout(new BorderLayout (1, 1));
         return chat;
     }
 
-    //private JPanel createChatPanel() {
-    //    JPanel chatPanel = new JPanel();
-    //    chatPanel.setLayout(new BorderLayout());
-    //    ChatBox chat = chatInit();
-    //    chatPanel.add(chat.getChatArea());
-    //    chatPanel.add(chat.getChatInput());
-    //    return chatPanel;
-    //}
+    //inti of Big2Panel
+    static private JPanel big2Init(){
+        JPanel big2 = new BigTwoPanel();
+        big2.setLayout(new BoxLayout(big2, BoxLayout.Y_AXIS));
+        return big2;
+    }
 
 
     /**
@@ -148,7 +159,26 @@ public class BigTwoGUI implements CardGameUI{
     }
 
     //inner class
-    class BigTwoPanel{
+    static class BigTwoPanel extends JPanel{
+        private JPanel bigTwoPanel = new JPanel();
+        private Image[] avater = new Image[4];
+        
+
+        public BigTwoPanel(){
+            //add image: https://stackoverflow.com/questions/299495/how-to-add-an-image-to-a-jpanel
+            for (int i = 0; i < avater.length; ++i){
+                BufferedImage myPicture = null;
+                try{
+                    myPicture = ImageIO.read(new File("image/avater/a1.gif"));
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                }
+                JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+                add(picLabel);
+                bigTwoPanel.add(picLabel);
+            }
+        }
 
     }
 
@@ -177,6 +207,7 @@ public class BigTwoGUI implements CardGameUI{
         public ChatBox(){
             chatArea = new JTextArea("Welcome to Chat Room", 10, CHAT_COL);
             chatInput = new JTextField(CHAT_COL);
+            chatArea.setEditable(false);
             add(chatArea);
             add(chatInput);
         }
