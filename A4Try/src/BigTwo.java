@@ -254,8 +254,7 @@ class BigTwo {
             System.out.println("<Table>");
             Hand lastHandOnTable = (handsOnTable.isEmpty()) ? null : handsOnTable.get(handsOnTable.size() - 1);
             if (lastHandOnTable != null) {
-                System.out
-                        .print("    <" + lastHandOnTable.getPlayer().getName() + "> {" + lastHandOnTable.getType() + "} ");
+                System.out.print("    <" + lastHandOnTable.getPlayer().getName() + "> {" + lastHandOnTable.getType() + "} ");
                 lastHandOnTable.print(true, false);
             } else {
                 System.out.println("  [Empty]");
@@ -263,12 +262,15 @@ class BigTwo {
             System.out.println();
 
             System.out.println("Game ends");
+            gui.printMsg("Game ends\n");
             for (int i = 0; i < numOfPlayers; ++i){
                 if (winner != i){
                     System.out.println("Player " + i + " has " + playerList.get(i).getNumOfCards() + " cards in hand.");
+                    gui.printMsg("Player " + i + " has " + playerList.get(i).getNumOfCards() + " cards in hand.\n");
                 }
                 else{
                     System.out.println("Player " + winner + " wins the game.");
+                    gui.printMsg("Player " + winner + " wins the game.\n");
                 }
             }
             return true;

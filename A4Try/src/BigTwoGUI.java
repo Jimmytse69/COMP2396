@@ -1,10 +1,7 @@
 /**
  * This is GUI class for Big2 Game
  * @author Tse Chung Wan, 3035689324
- * @version 1.0, 21/11/2021
- * comment: playable, but
- * 1. not resizable (disabled)
- * 2. bug on EAST Panel (chat and msg area not "fixed", possible fixed by scoller)
+ * @version 1.1, 22/11/2021
  */
 
 
@@ -62,7 +59,7 @@ public class BigTwoGUI implements CardGameUI{
         setBigTwoPanel(frame);
 
         frame.setSize(960, 720);
-        frame.setResizable(false);
+        //frame.setResizable(false);
         frame.setVisible(true);
 
         return frame;
@@ -70,7 +67,7 @@ public class BigTwoGUI implements CardGameUI{
 
     //set Frame icon
     private void setIcon(JFrame frame){
-        ImageIcon image = new ImageIcon("src/image/icon/icon.png");
+        ImageIcon image = new ImageIcon("image/icon/icon.png");
         frame.setIconImage(image.getImage());
     }
 
@@ -321,10 +318,10 @@ public class BigTwoGUI implements CardGameUI{
             //System.out.println("I have been clicked");
 
             int[] cardSelected = getCardSelected();
-            resetCardPosition();
-
-            game.makeMove(activePlayer, cardSelected);
-            
+            if (cardSelected != null){
+                resetCardPosition();
+                game.makeMove(activePlayer, cardSelected);
+            }   
         }
 
 
@@ -482,13 +479,13 @@ public class BigTwoGUI implements CardGameUI{
         private final int avaterWidth = 60;
         //not used now:
         //private final int avaterHeight = 60;
-        //private final int cardWidth = 73;
+        private final int cardWidth = 73;
         private final int cardHeight = 97;
 
-        private final Image avater = new ImageIcon("src/image/avater/a.png").getImage();
+        private final Image avater = new ImageIcon("image/avater/a.png").getImage();
         //image array rep ranks then suit
         private final Image[][] cards = new Image[13][4];
-        private final Image cardBack = new ImageIcon("src/image/cards/b.gif").getImage();
+        private final Image cardBack = new ImageIcon("image/cards/b.gif").getImage();
     
         BigTwoPanel() {
             this.setBackground(new Color(0x35654d));
@@ -504,7 +501,7 @@ public class BigTwoGUI implements CardGameUI{
         private void setCards() {
             for (int i = 0; i < RANKS.length; ++i){
                 for (int j = 0; j < SUITS.length; ++j){
-                        cards[i][j] = new ImageIcon("src/image/cards/" + RANKS[i] + SUITS[j] + ".gif").getImage();
+                        cards[i][j] = new ImageIcon("image/cards/" + RANKS[i] + SUITS[j] + ".gif").getImage();
                 }
             }
         }
@@ -517,15 +514,22 @@ public class BigTwoGUI implements CardGameUI{
             Graphics2D g2D = (Graphics2D) g;
             g2D.setColor(new Color(0x35654d));
             //it cover whole table
-            g2D.fillRect(0, 0, 960, 720);
+            g2D.fillRect(0, 0, 2000, 2000);
 
             //draw avater
             for (int i = 0; i < game.getNumOfPlayers(); ++i){
-                g2D.setColor(Color.RED);
+                if (i == activePlayer){
+                    g2D.setColor(Color.RED);
+                }
+                else{
+                    g2D.setColor(Color.BLACK);
+                }
                 g2D.drawString("Player " + i, 10, 30 + (i*120));
                 g2D.drawImage(avater, 10, 40 + (i*120), this);
             }
+            g2D.setColor(Color.BLUE);
             g2D.drawString("Table", 10, 30 + (4 * 120));
+            g2D.setColor(Color.BLACK);
             if (!game.getHandsOnTable().isEmpty()){
                 g2D.drawString(game.getHandsOnTable().get(game.getHandsOnTable().size() - 1).getPlayer().getName(), 10, 30 + (4 * 120) + 20);
             }
@@ -555,6 +559,7 @@ public class BigTwoGUI implements CardGameUI{
                         g2D.drawImage(cardBack, avaterWidth + 20 + (i*40), 30 + (j*120), this);
                     }
                 }
+                g2D.drawLine(0, 15+((j+1)*120), 1500, 15+((j+1)*120));
             }
 
             //draw Table
@@ -585,13 +590,26 @@ public class BigTwoGUI implements CardGameUI{
             int heightOfCards = 30 + (activePlayer * 120);
             if (y > heightOfCards && y < heightOfCards + cardHeight){
                 for (int i = 0; i < game.getPlayerList().get(activePlayer).getCardsInHand().size(); ++i){
-                    if (x > (avaterWidth + 20 + i*40) && x < (avaterWidth + 20 + i*40 + 40)){
-                        //toggle the selected state if it is clicked
-                        if (selected[i] == true){
-                            selected[i] = false;
+                    //last card of an row, "wider" selectable
+                    if (i == game.getPlayerList().get(activePlayer).getCardsInHand().size() - 1){
+                        if (x > (avaterWidth + 20 + i * 40) && x < (avaterWidth +20 + i*40 + cardWidth)) {
+                            if (selected[i] == true){
+                                selected[i] = false;
+                            }
+                            else{
+                                selected[i] = true;
+                            }
                         }
-                        else{
-                            selected[i] = true;
+                    }
+                    else{
+                        if (x > (avaterWidth + 20 + i*40) && x < (avaterWidth + 20 + i*40 + 40)){
+                            //toggle the selected state if it is clicked
+                            if (selected[i] == true){
+                                selected[i] = false;
+                            }
+                            else{
+                                selected[i] = true;
+                            }
                         }
                     }
                 }
@@ -641,4 +659,3 @@ public class BigTwoGUI implements CardGameUI{
     }
 
 }
-
