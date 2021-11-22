@@ -2,6 +2,7 @@
  * This is GUI class for Big2 Game
  * @author Tse Chung Wan, 3035689324
  * @version 1.1, 22/11/2021
+ * comment: end game now will shows all player's card's font side now
  */
 
 
@@ -536,7 +537,7 @@ public class BigTwoGUI implements CardGameUI{
 
             //draw cards
             for (int j = 0; j < game.getNumOfPlayers(); ++j){
-                if (j == activePlayer){
+                if (j == activePlayer || game.endOfGame() == true){
                     for (int i = 0; i < game.getPlayerList().get(j).getNumOfCards(); ++i){
                         //each row of cards starts from 20, advanced by 40
                         //each column starts from 30, advanced by 120
@@ -571,8 +572,8 @@ public class BigTwoGUI implements CardGameUI{
 
                     g2D.drawImage(cards[curRank][curSuit], avaterWidth + 20 + (i * 40), 30 + (4*120), this);
                 }
-                super.repaint();
             }
+            super.repaint();
 
             
         }
@@ -612,6 +613,12 @@ public class BigTwoGUI implements CardGameUI{
                             }
                         }
                     }
+                }
+            }
+
+            if (game.endOfGame() == true){
+                for (int i = 0; i < selected.length; ++i){
+                    selected[i] = false;
                 }
             }
 
