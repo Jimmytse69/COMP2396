@@ -29,6 +29,9 @@ class BigTwo {
         playerList.add(new CardGamePlayer("Player3"));
         //(ii) is done in initiallize private instance var. process
         this.gui = new BigTwoGUI(this);
+        this.client = new BigTwoClient(this, gui);
+        //(i.5 for A5)
+        client.connect();
     }
 
     //private instance vairbles
@@ -38,6 +41,9 @@ class BigTwo {
     private ArrayList<Hand> handsOnTable = new ArrayList<Hand>();
     private int currentPlayerIdx = 0;
     private BigTwoGUI gui;
+    //newly add in A5
+    private BigTwoClient client;
+    
 
     /**public getter of number of player (private attributes) 
      * @return numOfPlayers, int type
@@ -235,7 +241,7 @@ class BigTwo {
     }
 
     /**public method for checking if the game ends. */  
-    boolean endOfGame(){
+    public boolean endOfGame(){
         int winner = -1;    //check who win or no one win still
         for (int i = 0; i < numOfPlayers; ++i){
             if (playerList.get(i).getNumOfCards() == 0){
@@ -288,6 +294,9 @@ class BigTwo {
     public static void main(String[] args){
         //(i)
         BigTwo game = new BigTwo();
+        
+
+        
 
         //(ii)
         
@@ -326,4 +335,7 @@ class BigTwo {
         }
         return null;
     }
+
+
+    
 }

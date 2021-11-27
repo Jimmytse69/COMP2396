@@ -1,7 +1,8 @@
 /**
  * This is GUI class for Big2 Game
  * @author Tse Chung Wan, 3035689324
- * @version 1.1, 22/11/2021
+ * @version 1.1, 22/11/2021; 1.2, 27/11/2021
+ * v1.2 modify the Restart menu for Assignment 5
  */
 
 
@@ -25,6 +26,8 @@ public class BigTwoGUI implements CardGameUI{
 
     private JPanel msgPanel;
     private JPanel buttonPanel;
+    //newly add variable for A5
+    private BigTwoClient client;
 
     /**
      * public constructor for creating a BigTwoGUI. The param is reference to a Big Two card game asscoiates with it
@@ -73,7 +76,8 @@ public class BigTwoGUI implements CardGameUI{
 
     //set Menu bar by passed a frame
     private void setMenu(JFrame frame){
-        JMenuItem restart = new JMenuItem("Restart");
+        //display name changed to connect
+        JMenuItem restart = new JMenuItem("Connect");
         new RestartMenuItemListener(restart);
         JMenuItem quit = new JMenuItem("Quit");
         new QuitMenuItemListener(quit);
@@ -417,20 +421,14 @@ public class BigTwoGUI implements CardGameUI{
 
         @Override
         /**
-         * restart the game when this menuitem pressed
-         * (i)  create a new BigTwoDeck obj and call shuffle
-         * (ii) call the start() from game with (i) obj as arg
+         * Replaced with Connect function to establish a connection to game server.
+         * This is defined as starting point of networking game now.
          * @param ActionEvent e
          */
+        //ref: https://vimsky.com/zh-tw/examples/detail/java-method-javax.swing.JOptionPane.showInputDialog.html
         public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
-            //(i)
-            BigTwoDeck d = new BigTwoDeck();
-            d.shuffle();
-
-            //(ii)
-            msgArea.append("Game Restarted!\n");
-            game.start(d);
+            String inputName = JOptionPane.showInputDialog("Please input your name to login to server");
+            client.connect();
         }
 
     }
