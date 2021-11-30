@@ -27,8 +27,6 @@ public class BigTwoGUI implements CardGameUI{
     private JPanel msgPanel;
     private JPanel buttonPanel;
 
-    //A5
-    private BigTwoClient client;
 
     /**
      * public constructor for creating a BigTwoGUI. The param is reference to a Big Two card game asscoiates with it
@@ -36,7 +34,6 @@ public class BigTwoGUI implements CardGameUI{
      */
     public BigTwoGUI (BigTwo game){
         this.game = game;
-        this.client = game.getClient();
         frame = frameInit();
         setActivePlayer(game.getCurrentPlayerIdx());
     }
@@ -401,7 +398,7 @@ public class BigTwoGUI implements CardGameUI{
             if (e.getKeyCode()==KeyEvent.VK_ENTER){
                 String msg = chatInput.getText();
                 //A5 send to server
-                client.sendMessage(new CardGameMessage(CardGameMessage.MSG, -1, msg));
+                game.getClient().sendMessage(new CardGameMessage(CardGameMessage.MSG, -1, msg));
                 //chatArea.append("Player " + activePlayer + ": " + msg + "\n");
                 chatInput.setText("");
             }
@@ -545,7 +542,7 @@ public class BigTwoGUI implements CardGameUI{
 
             //draw cards
             for (int j = 0; j < game.getNumOfPlayers(); ++j){
-                if ((j == activePlayer|| game.endOfGame() == true)){
+                if ((j == game.getClient().getPlayerID() || game.endOfGame() == true)){
                     for (int i = 0; i < game.getPlayerList().get(j).getNumOfCards(); ++i){
                         //each row of cards starts from 20, advanced by 40
                         //each column starts from 30, advanced by 120

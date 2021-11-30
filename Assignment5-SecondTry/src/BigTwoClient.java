@@ -155,7 +155,8 @@ public class BigTwoClient implements NetworkGame {
         System.out.println(message.getType());
 		switch (message.getType()) {
             case CardGameMessage.PLAYER_LIST:
-                this.playerID = message.getPlayerID();
+                this.setPlayerID(message.getPlayerID());
+                System.out.println("this playerId: " + this.getPlayerID());
                 this.game.getPlayerList().get(playerID).setName(this.getPlayerName());
                 String[] names = (String[])message.getData();
                 for (int i = 0; i < names.length; ++i){
