@@ -334,7 +334,7 @@ public class BigTwoClient implements NetworkGame {
 
     /** self added public method to print dialog box in game end */
     public void endGameMessage(){
-        JOptionPane.showMessageDialog(null, "Game End, playerID: " + game.getCurrentPlayerIdx() + " win.");
+        JOptionPane.showMessageDialog(null, "Game End, playerName: " + game.getPlayerList().get(game.getCurrentPlayerIdx() - 1).getName() + " win.");
     }
 
     /** self added public method to restart the game (call server) when game end */
