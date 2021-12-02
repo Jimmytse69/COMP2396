@@ -442,10 +442,16 @@ public class BigTwoGUI implements CardGameUI{
          */
         public void actionPerformed(ActionEvent e) {
 
-        BigTwoGUI.this.game.getClient().setPlayerName( JOptionPane.showInputDialog("Please input your name") );
-        BigTwoGUI.this.game.getClient().setServerIP("127.0.0.1");
-        BigTwoGUI.this.game.getClient().setServerPort(2396);
-        BigTwoGUI.this.game.getClient().connect();
+        if (!game.getClient().getConnected()){
+            BigTwoGUI.this.game.getClient().setPlayerName( JOptionPane.showInputDialog("Please input your name") );
+            BigTwoGUI.this.game.getClient().setServerIP("127.0.0.1");
+            BigTwoGUI.this.game.getClient().setServerPort(2396);
+            BigTwoGUI.this.game.getClient().connect();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "you already connected to the server");
+        }
+        
         
         }
 

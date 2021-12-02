@@ -40,6 +40,9 @@ public class BigTwoClient implements NetworkGame {
     private String serverIP;
     private int serverPort; 
 
+    //newly added private var to disable connect button in gui after connected
+    private boolean connected = false;
+
 
     /**
      * public getter of playerID (index) of the local player.
@@ -131,12 +134,14 @@ public class BigTwoClient implements NetworkGame {
             Thread t = new Thread(new ServerHandler());
             t.start();
 
-
+            //indicate connection and disable connect button
+            connected = true;
 
 
         }
         catch (Exception ex){
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Server down");
             System.out.println("Explosion");
         }
         
@@ -198,9 +203,9 @@ public class BigTwoClient implements NetworkGame {
                 //disconnected?
                 break;
             case CardGameMessage.QUIT:
+                //"Stop" the game
+                gui.disableButtons();
                 if (game.getGameStarted()){
-                    //"Stop" the game
-                    gui.disableButtons();
                     sendMessage(new CardGameMessage(CardGameMessage.READY, -1, null));
                 }
                 game.getPlayerList().get(message.getPlayerID()).setName("");
@@ -214,7 +219,11 @@ public class BigTwoClient implements NetworkGame {
             case CardGameMessage.START:
                 //start the game with server created deck
                 this.game.start((Deck) message.getData());
-                gui.enable();
+                gui.disableButtons();
+                //only enable the active player client
+                if (this.getPlayerID() == game.getCurrentPlayerIdx()){
+                    gui.enable();
+                }
                 game.setGameStarted(true);
                 gui.repaint();
                 break;
@@ -331,6 +340,11 @@ public class BigTwoClient implements NetworkGame {
     /** self added public method to restart the game (call server) when game end */
     public void restart() {
         sendMessage(new CardGameMessage(CardGameMessage.READY, -1, null));
+    }
+
+    /** self added getter to get connected status in gui to "disable" reconnection*/
+    public boolean getConnected(){
+        return connected;
     }
     
     

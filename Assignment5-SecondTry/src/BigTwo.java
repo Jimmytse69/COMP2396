@@ -142,14 +142,19 @@ class BigTwo {
             boolean valid = false;
             if (cardIdx == null){   //you intended to pass
                 if (handsOnTable.size() == 0){  //can't skip in 1st round
-                    System.out.println("Not a legal move!!!");
-                    gui.printMsg("Not a legal move!!!\n");
+                    if (client.getPlayerID() == currentPlayerIdx){
+                        System.out.println("Not a legal move!!!");
+                        gui.printMsg("Not a legal move!!!\n");
+                    }
+                    
                 }
                 else{
                     if (handsOnTable.get(handsOnTable.size() - 1).getPlayer() == playerList.get(playerIdx)){
                         //cannot pass bc you are the one who play the table hand
-                        System.out.println("Not a legal move!!!");
-                        gui.printMsg("Not a legal move!!!\n");
+                        if (client.getPlayerID() == currentPlayerIdx){
+                            System.out.println("Not a legal move!!!");
+                            gui.printMsg("Not a legal move!!!\n");
+                        }
                     }
                     else{
                         System.out.println("{Pass}");
@@ -180,8 +185,10 @@ class BigTwo {
                         valid = true;
                     }
                     else{
-                        System.out.println("Not a legal move!!!");
-                        gui.printMsg("Not a legal move!!!\n");
+                        if (client.getPlayerID() == currentPlayerIdx){
+                            System.out.println("Not a legal move!!!");
+                            gui.printMsg("Not a legal move!!!\n");
+                        }
                     }
                 }
                 //so it is not first turn and you try to play sth; if logic: not a and not b
@@ -198,8 +205,10 @@ class BigTwo {
                             valid = true;
                         }
                         else{
-                            System.out.println("Not a legal move!!!");
-                            gui.printMsg("Not a legal move!!!\n");
+                            if (client.getPlayerID() == currentPlayerIdx){
+                                System.out.println("Not a legal move!!!");
+                                gui.printMsg("Not a legal move!!!\n");
+                            }
                         }
                     }
                     //you need to follow the beat rule to beat Top handsOnTable
@@ -215,13 +224,17 @@ class BigTwo {
                                 valid = true;
                             }
                             else{
-                                System.out.println("Not a legal move!!!");
-                                gui.printMsg("Not a legal move!!!\n");
+                                if (client.getPlayerID() == currentPlayerIdx){
+                                    System.out.println("Not a legal move!!!");
+                                    gui.printMsg("Not a legal move!!!\n");
+                                }
                             }
                         }
                         else{
-                            System.out.println("Not a legal move!!!");
-                            gui.printMsg("Not a legal move!!!\n");
+                            if (client.getPlayerID() == currentPlayerIdx){
+                                System.out.println("Not a legal move!!!");
+                                gui.printMsg("Not a legal move!!!\n");
+                            }
                         }
                     }
                 }
