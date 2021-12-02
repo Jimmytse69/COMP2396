@@ -1,5 +1,3 @@
-import java.nio.file.ClosedFileSystemException;
-import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -116,6 +114,8 @@ class BigTwo {
             }
         }
 
+        
+
         //(v)
         gui.repaint();
 
@@ -134,6 +134,7 @@ class BigTwo {
         //checkMove(playerIdx, cardIdx);
         //A5
         client.sendMessage(new CardGameMessage(CardGameMessage.MOVE, -1, (Object) cardIdx));
+        
     }
 
     /**public method for checking a move made by player. Supposed to called from makeMove() method. */
@@ -226,7 +227,7 @@ class BigTwo {
                 }
             }
         gui.setActivePlayer(currentPlayerIdx);
-        if (!endOfGame()){
+        if (!endOfGame() && gameStarted == true){
             if (valid){
                 gui.repaint();
                 //from BigTwoUI
@@ -286,6 +287,10 @@ class BigTwo {
                     gui.printMsg("Player " + winner + " wins the game.\n");
                 }
             }
+            //newly added in A5
+            client.endGameMessage();
+            client.restart();
+            gameStarted = false;
             return true;
         }
         else{

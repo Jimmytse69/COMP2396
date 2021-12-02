@@ -152,11 +152,9 @@ public class BigTwoClient implements NetworkGame {
     public void parseMessage(GameMessage message) {
 
         // parses the message based on it type
-        System.out.println(message.getType());
 		switch (message.getType()) {
             case CardGameMessage.PLAYER_LIST:
                 this.setPlayerID(message.getPlayerID());
-                System.out.println("this playerId: " + this.getPlayerID());
                 this.game.getPlayerList().get(playerID).setName(this.getPlayerName());
                 String[] names = (String[])message.getData();
                 for (int i = 0; i < names.length; ++i){
@@ -175,6 +173,7 @@ public class BigTwoClient implements NetworkGame {
                     sendMessage(new CardGameMessage(CardGameMessage.JOIN, -1, this.playerName));
                 }
                 catch (Exception ex){
+                    ex.printStackTrace();
                     System.out.println("Explosion in JOIN");
                 }
                 break;
@@ -184,11 +183,12 @@ public class BigTwoClient implements NetworkGame {
                         sendMessage(new CardGameMessage(CardGameMessage.READY, -1, null));
                     }
                     catch (Exception ex){
+                        ex.printStackTrace();
                         System.out.println("Explosion in READY");
                     }
                 }
                 else{
-                    //game.getPlayerList().get(message.getPlayerID()).setName((String) message.getData());
+                    game.getPlayerList().get(message.getPlayerID()).setName((String) message.getData());
                 }
                 gui.repaint();
                 break;
@@ -198,21 +198,24 @@ public class BigTwoClient implements NetworkGame {
                 //disconnected?
                 break;
             case CardGameMessage.QUIT:
+                if (game.getGameStarted()){
+                    //"Stop" the game
+                    gui.disableButtons();
+                    sendMessage(new CardGameMessage(CardGameMessage.READY, -1, null));
+                }
                 game.getPlayerList().get(message.getPlayerID()).setName("");
-                //"Stop" the game
-                gui.disable();
                 gui.printMsg((String) message.getData() + " has leaved");
                 gui.repaint();
                 break;
             case CardGameMessage.READY:
-                gui.printMsg(message.getPlayerID() + " ready");
+                gui.printMsg("player ID: " + message.getPlayerID() + " ready\n");
                 gui.repaint();
                 break;
             case CardGameMessage.START:
                 //start the game with server created deck
                 this.game.start((Deck) message.getData());
+                gui.enable();
                 game.setGameStarted(true);
-                System.out.print("I am HERERERERSDFSDFSD");
                 gui.repaint();
                 break;
             case CardGameMessage.MOVE:
@@ -220,10 +223,9 @@ public class BigTwoClient implements NetworkGame {
                 gui.repaint();
                 break;
             case CardGameMessage.MSG:
-                gui.getChatArea().append((String) message.getData());
+                gui.getChatArea().append((String) message.getData() + "\n");
                 gui.repaint();
                 break;
-
             default:
                 System.out.println("Wrong message type: " + message.getType());
                 // invalid message
@@ -310,10 +312,8 @@ public class BigTwoClient implements NetworkGame {
                 // reads incoming messages from the server
                 while ((message = (CardGameMessage)reader.readObject()) != null) {
                     parseMessage(message);
-                    System.out.println("read " + message);
-                    // appends the incoming message to the text area
-                    gui.printMsg(message + "\n");
-                } // close while
+                    //System.out.println("read " + message);
+                }
             }
             catch (Exception ex) {
                 ex.printStackTrace();
@@ -321,6 +321,16 @@ public class BigTwoClient implements NetworkGame {
             
         }
         
+    }
+
+    /** self added public method to print dialog box in game end */
+    public void endGameMessage(){
+        JOptionPane.showMessageDialog(null, "Game End, playerID: " + game.getCurrentPlayerIdx() + " win.");
+    }
+
+    /** self added public method to restart the game (call server) when game end */
+    public void restart() {
+        sendMessage(new CardGameMessage(CardGameMessage.READY, -1, null));
     }
     
     

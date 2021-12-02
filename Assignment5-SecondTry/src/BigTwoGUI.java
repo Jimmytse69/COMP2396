@@ -75,7 +75,7 @@ public class BigTwoGUI implements CardGameUI{
 
     //set Menu bar by passed a frame
     private void setMenu(JFrame frame){
-        JMenuItem restart = new JMenuItem("Restart");
+        JMenuItem restart = new JMenuItem("Connect");
         new RestartMenuItemListener(restart);
         JMenuItem quit = new JMenuItem("Quit");
         new QuitMenuItemListener(quit);
@@ -297,11 +297,28 @@ public class BigTwoGUI implements CardGameUI{
     }
 
     /**
+     * a method for A5, disable Buttons and Panel only but not input
+     */
+    public void disableButtons() {
+        playButton.setEnabled(false);
+        passButton.setEnabled(false);
+        bigTwoPanel.setEnabled(false);
+    }
+
+    /**
      * a method for prompting the active player to select cards and make move.
      * a message should be displayed in the msg area showing it is his/her turn
      */
     public void promptActivePlayer() {
         setActivePlayer(activePlayer);
+        if (this.game.getClient().getPlayerID() != activePlayer){
+            this.disableButtons();
+            this.repaint();
+        }
+        else{
+            this.enable();
+            this.repaint();
+        }
         msgArea.append("Player " + activePlayer + "'s turn:" + "\n");
     }
 
@@ -398,7 +415,7 @@ public class BigTwoGUI implements CardGameUI{
             if (e.getKeyCode()==KeyEvent.VK_ENTER){
                 String msg = chatInput.getText();
                 //A5 send to server
-                game.getClient().sendMessage(new CardGameMessage(CardGameMessage.MSG, -1, msg));
+                game.getClient().sendMessage(new CardGameMessage(CardGameMessage.MSG, -1, msg + "\n"));
                 //chatArea.append("Player " + activePlayer + ": " + msg + "\n");
                 chatInput.setText("");
             }
@@ -420,20 +437,16 @@ public class BigTwoGUI implements CardGameUI{
 
         @Override
         /**
-         * restart the game when this menuitem pressed
-         * (i)  create a new BigTwoDeck obj and call shuffle
-         * (ii) call the start() from game with (i) obj as arg
+         * Connect the game when disconnected
          * @param ActionEvent e
          */
         public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
-            //(i)
-            BigTwoDeck d = new BigTwoDeck();
-            d.shuffle();
 
-            //(ii)
-            msgArea.append("Game Restarted!\n");
-            game.start(d);
+        BigTwoGUI.this.game.getClient().setPlayerName( JOptionPane.showInputDialog("Please input your name") );
+        BigTwoGUI.this.game.getClient().setServerIP("127.0.0.1");
+        BigTwoGUI.this.game.getClient().setServerPort(2396);
+        BigTwoGUI.this.game.getClient().connect();
+        
         }
 
     }
@@ -549,7 +562,7 @@ public class BigTwoGUI implements CardGameUI{
                         //print card by searching that player's hand i'th card's rank and suit
                         int curRank = game.getPlayerList().get(j).getCardsInHand().getCard(i).getRank();
                         int curSuit = game.getPlayerList().get(j).getCardsInHand().getCard(i).getSuit();
-                        if (selected[i] == true){
+                        if (selected[i] == true && game.getClient().getPlayerID() == game.getCurrentPlayerIdx()){
                             //move it higher if it is selected
                             g2D.drawImage(cards[curRank][curSuit], avaterWidth + 20 + (i*40), 30 + (j*120) - 15, this);
                         }
@@ -601,7 +614,7 @@ public class BigTwoGUI implements CardGameUI{
             if (y > heightOfCards && y < heightOfCards + cardHeight){
                 for (int i = 0; i < game.getPlayerList().get(activePlayer).getCardsInHand().size(); ++i){
                     //last card of an row, "wider" selectable
-                    if (i == game.getPlayerList().get(activePlayer).getCardsInHand().size() - 1){
+                    if (i == 12){
                         if (x > (avaterWidth + 20 + i * 40) && x < (avaterWidth +20 + i*40 + cardWidth)) {
                             if (selected[i] == true){
                                 selected[i] = false;
@@ -681,5 +694,6 @@ public class BigTwoGUI implements CardGameUI{
     public JTextArea getChatArea() {
         return chatArea;
     }
+
 
 }
